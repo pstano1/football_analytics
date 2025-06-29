@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="22"
+	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
+	 last-position="40,14" last-zoom="1" scene-rect="0,0,1956.39,1076.8"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="warehouse" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+</schema>
+
+<schema name="core" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#31363b">
+	<role name="postgres"/>
+</schema>
+
+<schema name="metadata" layers="0" rect-visible="true" fill-color="#57f186" name-color="#31363b">
+	<role name="postgres"/>
+</schema>
+
+<table name="players" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="60" y="60"/>
+	<column name="player_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="full_name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="birthday">
+		<type name="date" length="0"/>
+	</column>
+	<column name="primary_position">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="nationality">
+		<type name="varchar" length="0"/>
+	</column>
+	<constraint name="players_pk" type="pk-constr" table="core.players">
+		<columns names="player_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="teams" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="360" y="60"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="team_name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="common_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="association_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="team_pk" type="pk-constr" table="core.teams">
+		<columns names="team_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="countries" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="720" y="60"/>
+	<column name="name">
+		<type name="varchar" length="128"/>
+	</column>
+</table>
+
+<table name="associations" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="940" y="60"/>
+	<column name="association_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="full_name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="short_name">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="country" not-null="true">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="associations_pk" type="pk-constr" table="core.associations">
+		<columns names="association_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="seasons" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="1260" y="60"/>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="season_pk" type="pk-constr" table="core.seasons">
+		<columns names="season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="leagues" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="60" y="260"/>
+	<column name="league_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="association_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="tier">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="league_pk" type="pk-constr" table="core.leagues">
+		<columns names="league_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="leagues_seasons" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="380" y="260"/>
+	<column name="leagues_seasons_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="league_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="league_season_unique" type="uq-constr" table="core.leagues_seasons">
+		<columns names="leagues_seasons_id,league_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="leagues_seasons_pk" type="pk-constr" table="core.leagues_seasons">
+		<columns names="leagues_seasons_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="matches" layers="0" collapse-mode="2" max-obj-count="8" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="740" y="260"/>
+	<column name="match_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="date" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="home_team_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="away_team_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="referee_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="stadium_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="matches_pk" type="pk-constr" table="core.matches">
+		<columns names="match_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="referees" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="1060" y="260"/>
+	<column name="referee_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="full_name" not-null="true">
+		<type name="varchar" length="128"/>
+	</column>
+	<column name="association_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="referees_pk" type="pk-constr" table="core.referees">
+		<columns names="referee_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="stadiums" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="1400" y="260"/>
+	<column name="stadium_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="capacity">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="country" not-null="true">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="name_unique" type="uq-constr" table="core.stadiums">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="stadiums_pk" type="pk-constr" table="core.stadiums">
+		<columns names="stadium_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="player_statistics" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="60" y="580"/>
+	<column name="player_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="player_season_pk" type="pk-constr" table="core.player_statistics">
+		<columns names="player_id,season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="associations_self_relations" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="360" y="580"/>
+	<column name="parent_association" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="child_association" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="parent_child_associations_pk" type="pk-constr" table="core.associations_self_relations">
+		<columns names="parent_association,child_association" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="team_statitics" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="760" y="580"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="team_season_pk" type="pk-constr" table="core.team_statitics">
+		<columns names="team_id,season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="etl_logs" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="metadata"/>
+	<role name="postgres"/>
+	<position x="1740" y="60"/>
+	<column name="log_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="etl_log_pk" type="pk-constr" table="metadata.etl_logs">
+		<columns names="log_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="players_country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.countries" table="core.players">
+	<columns names="nationality" ref-type="src-columns"/>
+	<columns names="name" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.associations" table="core.teams">
+	<columns names="team_id" ref-type="src-columns"/>
+	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="association_country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="core.countries" table="core.associations">
+	<columns names="country" ref-type="src-columns"/>
+	<columns names="name" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="league_association_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.associations" table="core.leagues">
+	<columns names="association_id" ref-type="src-columns"/>
+	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="leagues_seasons_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.seasons" table="core.leagues_seasons">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="leagues_seasons_leagues_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.leagues" table="core.leagues_seasons">
+	<columns names="league_id" ref-type="src-columns"/>
+	<columns names="league_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="home_team_teams_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.teams" table="core.matches">
+	<columns names="home_team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="away_team_teams_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.teams" table="core.matches">
+	<columns names="away_team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="referee_referees_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.referees" table="core.matches">
+	<columns names="referee_id" ref-type="src-columns"/>
+	<columns names="referee_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="stadium_stadiums_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.stadiums" table="core.matches">
+	<columns names="stadium_id" ref-type="src-columns"/>
+	<columns names="stadium_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="season_seasons_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.seasons" table="core.matches">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.associations" table="core.referees">
+	<columns names="association_id" ref-type="src-columns"/>
+	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="country_countries_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.countries" table="core.stadiums">
+	<columns names="country" ref-type="src-columns"/>
+	<columns names="name" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="player_players_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.players" table="core.player_statistics">
+	<columns names="player_id" ref-type="src-columns"/>
+	<columns names="player_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="season_seasons_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.seasons" table="core.player_statistics">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="parent_association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.associations" table="core.associations_self_relations">
+	<columns names="parent_association" ref-type="src-columns"/>
+	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="child_association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.associations" table="core.associations_self_relations">
+	<columns names="child_association" ref-type="src-columns"/>
+	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="team_teams_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.teams" table="core.team_statitics">
+	<columns names="team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="season_seasons_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.seasons" table="core.team_statitics">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_associations_country" type="relfk" layers="0"
+	 src-table="core.associations"
+	 dst-table="core.countries" reference-fk="association_country_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_players_country" type="relfk" layers="0"
+	 src-table="core.players"
+	 dst-table="core.countries" reference-fk="players_country_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_league_associations" type="relfk" layers="0"
+	 src-table="core.leagues"
+	 dst-table="core.associations" reference-fk="league_association_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_leagues_seasons_seasons" type="relfk" layers="0"
+	 src-table="core.leagues_seasons"
+	 dst-table="core.seasons" reference-fk="leagues_seasons_season_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_leagues_seasons_leagues" type="relfk" layers="0"
+	 src-table="core.leagues_seasons"
+	 dst-table="core.leagues" reference-fk="leagues_seasons_leagues_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_matches_teams" type="relfk" layers="0"
+	 src-table="core.matches"
+	 dst-table="core.teams" reference-fk="home_team_teams_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_matches_teams1" type="relfk" layers="0"
+	 src-table="core.matches"
+	 dst-table="core.teams" reference-fk="away_team_teams_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_referees_associations" type="relfk" layers="0"
+	 src-table="core.referees"
+	 dst-table="core.associations" reference-fk="association_associations_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_matches_referees" type="relfk" layers="0"
+	 src-table="core.matches"
+	 dst-table="core.referees" reference-fk="referee_referees_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_stadiums_countries" type="relfk" layers="0"
+	 src-table="core.stadiums"
+	 dst-table="core.countries" reference-fk="country_countries_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_matches_stadiums" type="relfk" layers="0"
+	 src-table="core.matches"
+	 dst-table="core.stadiums" reference-fk="stadium_stadiums_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_matches_seasons" type="relfk" layers="0"
+	 src-table="core.matches"
+	 dst-table="core.seasons" reference-fk="season_seasons_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_teams_associations" type="relfk" layers="0"
+	 src-table="core.teams"
+	 dst-table="core.associations" reference-fk="association_associations_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="6.78402" y="-2.65299"/>
+	</label>
+</relationship>
+
+<relationship name="rel_associations_self_relations_associations" type="relfk" layers="0"
+	 src-table="core.associations_self_relations"
+	 dst-table="core.associations" reference-fk="parent_association_associations_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_associations_self_relations_associations1" type="relfk" layers="0"
+	 src-table="core.associations_self_relations"
+	 dst-table="core.associations" reference-fk="child_association_associations_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_team_statitics_teams" type="relfk" layers="0"
+	 src-table="core.team_statitics"
+	 dst-table="core.teams" reference-fk="team_teams_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_player_statistics_seasons" type="relfk" layers="0"
+	 src-table="core.player_statistics"
+	 dst-table="core.seasons" reference-fk="season_seasons_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_player_statistics_players" type="relfk" layers="0"
+	 src-table="core.player_statistics"
+	 dst-table="core.players" reference-fk="player_players_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_team_statitics_seasons" type="relfk" layers="0"
+	 src-table="core.team_statitics"
+	 dst-table="core.seasons" reference-fk="season_seasons_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="65.1436" y="4.74701"/>
+	</label>
+</relationship>
+
+</dbmodel>
