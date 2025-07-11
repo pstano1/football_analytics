@@ -3,9 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="22"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="40"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="40,14" last-zoom="1" scene-rect="0,0,1956.39,1076.8"
+	 last-position="0,0" last-zoom="0.65" scene-rect="0,0,2610.24,1428.32"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -26,7 +26,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </schema>
 
-<table name="players" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+<schema name="match_performance_mart" layers="0" rect-visible="true" fill-color="#cc9539" name-color="#31363b">
+	<role name="postgres"/>
+</schema>
+
+<schema name="player_performance_mart" layers="0" rect-visible="true" fill-color="#d11faf" name-color="#31363b">
+	<role name="postgres"/>
+</schema>
+
+<schema name="team_standings_mart" layers="0" rect-visible="true" fill-color="#0dbdca" name-color="#31363b">
+	<role name="postgres"/>
+</schema>
+
+<table name="players" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
 	<position x="60" y="60"/>
@@ -43,14 +55,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="varchar" length="64"/>
 	</column>
 	<column name="nationality">
-		<type name="varchar" length="0"/>
+		<type name="varchar" length="128"/>
 	</column>
 	<constraint name="players_pk" type="pk-constr" table="core.players">
 		<columns names="player_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="teams" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="teams" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
 	<position x="360" y="60"/>
@@ -66,6 +78,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="association_id">
 		<type name="uuid" length="0"/>
 	</column>
+	<column name="home_stadium">
+		<type name="uuid" length="0"/>
+	</column>
 	<constraint name="team_pk" type="pk-constr" table="core.teams">
 		<columns names="team_id" ref-type="src-columns"/>
 	</constraint>
@@ -74,7 +89,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="countries" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="720" y="60"/>
+	<position x="680" y="60"/>
 	<column name="name">
 		<type name="varchar" length="128"/>
 	</column>
@@ -83,7 +98,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="associations" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="940" y="60"/>
+	<position x="900" y="60"/>
 	<column name="association_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -101,10 +116,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="seasons" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+<table name="seasons" layers="0" collapse-mode="1" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1260" y="60"/>
+	<position x="1220" y="60"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -116,10 +131,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="leagues" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="leagues" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="60" y="260"/>
+	<position x="60" y="240"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -137,10 +152,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="leagues_seasons" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="leagues_seasons" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="380" y="260"/>
+	<position x="360" y="240"/>
 	<column name="leagues_seasons_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -158,10 +173,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="matches" layers="0" collapse-mode="2" max-obj-count="8" z-value="0">
+<table name="matches" layers="0" collapse-mode="1" max-obj-count="33" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="740" y="260"/>
+	<position x="660" y="240"/>
 	<column name="match_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -183,15 +198,78 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="stadium_id">
 		<type name="uuid" length="0"/>
 	</column>
+	<column name="attendence">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_goals_at_half_time">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_goals_at_half_time">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_corners">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_corners">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_yellow_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_yellow_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_red_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_red_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_shots_on_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_shots_on_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_shots_off_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_shots_off_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_fouls">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_fouls">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_possession">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="away_team_possession">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="home_team_xg">
+		<type name="decimal" length="8"/>
+	</column>
+	<column name="away_team_xg">
+		<type name="decimal" length="8"/>
+	</column>
 	<constraint name="matches_pk" type="pk-constr" table="core.matches">
 		<columns names="match_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="referees" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="referees" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1060" y="260"/>
+	<position x="1000" y="240"/>
 	<column name="referee_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -206,10 +284,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="stadiums" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="stadiums" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1400" y="260"/>
+	<position x="1300" y="240"/>
 	<column name="stadium_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -230,25 +308,55 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="player_statistics" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="player_statistics" layers="0" collapse-mode="1" max-obj-count="14" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="60" y="580"/>
+	<position x="60" y="760"/>
 	<column name="player_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
+	<column name="appearances">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="minutes_played">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="assists">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="penalty_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="penalty_misses">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="clean_sheets">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="conceded_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="yellow_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="red_cards">
+		<type name="smallint" length="0"/>
+	</column>
 	<constraint name="player_season_pk" type="pk-constr" table="core.player_statistics">
 		<columns names="player_id,season_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="associations_self_relations" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="associations_self_relations" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="360" y="580"/>
+	<position x="320" y="760"/>
 	<column name="parent_association" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -260,30 +368,402 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="team_statitics" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="etl_logs" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
+	<schema name="metadata"/>
+	<role name="postgres"/>
+	<position x="1580" y="60"/>
+	<column name="log_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="job_name" not-null="true">
+		<type name="varchar" length="128"/>
+	</column>
+	<column name="run_start" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="run_end">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="status">
+		<type name="varchar" length="16"/>
+	</column>
+	<column name="rows_loaded">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="rows_updated">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="rows_deleted">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="error_message">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="etl_log_pk" type="pk-constr" table="metadata.etl_logs">
+		<columns names="log_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="positions" layers="0" collapse-mode="1" max-obj-count="1" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="760" y="580"/>
-	<column name="team_id" not-null="true">
+	<position x="620" y="760"/>
+	<column name="position" not-null="true">
+		<type name="varchar" length="64"/>
+	</column>
+	<constraint name="positions_pk" type="pk-constr" table="core.positions">
+		<columns names="position" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="players_teams" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+	<schema name="core"/>
+	<role name="postgres"/>
+	<position x="880" y="760"/>
+	<column name="player_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<constraint name="team_season_pk" type="pk-constr" table="core.team_statitics">
-		<columns names="team_id,season_id" ref-type="src-columns"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="player_team_season_pk" type="pk-constr" table="core.players_teams">
+		<columns names="player_id,season_id,team_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="etl_logs" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
-	<schema name="metadata"/>
+<table name="fact_match_performance" layers="0" collapse-mode="2" max-obj-count="18" z-value="0">
+	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1740" y="60"/>
-	<column name="log_id" not-null="true">
+	<position x="1960" y="320"/>
+	<column name="match_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<constraint name="etl_log_pk" type="pk-constr" table="metadata.etl_logs">
-		<columns names="log_id" ref-type="src-columns"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="opponent_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="league_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="goals_at_half_time">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="corners">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="yellow_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="red_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="shots_on_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="shots_off_target">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="fouls">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="possession">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="xg">
+		<type name="decimal" length="8"/>
+	</column>
+	<constraint name="fact_match_performance_pk" type="pk-constr" table="match_performance_mart.fact_match_performance">
+		<columns names="match_id,team_id,opponent_id,season_id,league_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_team" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="match_performance_mart"/>
+	<role name="postgres"/>
+	<position x="1580" y="340"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="team_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<constraint name="dim_team_pk" type="pk-constr" table="match_performance_mart.dim_team">
+		<columns names="team_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_match" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="match_performance_mart"/>
+	<role name="postgres"/>
+	<position x="2360" y="320"/>
+	<column name="match_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="attendence">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="stadium">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="referee">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="dim_match_pk" type="pk-constr" table="match_performance_mart.dim_match">
+		<columns names="match_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="match_performance_mart"/>
+	<role name="postgres"/>
+	<position x="2360" y="680"/>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="dim_season_pk" type="pk-constr" table="match_performance_mart.dim_season">
+		<columns names="season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_league" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="match_performance_mart"/>
+	<role name="postgres"/>
+	<position x="1580" y="680"/>
+	<column name="league_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="256"/>
+	</column>
+	<constraint name="dim_league_pk" type="pk-constr" table="match_performance_mart.dim_league">
+		<columns names="league_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fact_player_performance" layers="0" collapse-mode="2" max-obj-count="16" z-value="0">
+	<schema name="player_performance_mart"/>
+	<role name="postgres"/>
+	<position x="1900" y="820"/>
+	<column name="player_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="team_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="league_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="minutes_played">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="appearances">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="assists">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="penalty_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="penalty_misses">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="clean_sheets">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="conceded_goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="yellow_cards">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="red_cards">
+		<type name="smallint" length="0"/>
+	</column>
+</table>
+
+<table name="dim_player" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="player_performance_mart"/>
+	<role name="postgres"/>
+	<position x="2360" y="820"/>
+	<column name="player_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="full_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="birthday">
+		<type name="date" length="0"/>
+	</column>
+	<column name="primary_position">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="nationality">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="dim_player_pk" type="pk-constr" table="player_performance_mart.dim_player">
+		<columns names="player_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="player_performance_mart"/>
+	<role name="postgres"/>
+	<position x="2360" y="1220"/>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="dim_season_pk" type="pk-constr" table="player_performance_mart.dim_season">
+		<columns names="season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_league" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="player_performance_mart"/>
+	<role name="postgres"/>
+	<position x="1580" y="820"/>
+	<column name="league_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="tier">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="dim_league_pk" type="pk-constr" table="player_performance_mart.dim_league">
+		<columns names="league_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_team" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="player_performance_mart"/>
+	<role name="postgres"/>
+	<position x="1580" y="1220"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="team_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="common_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<constraint name="dim_team_pk" type="pk-constr" table="player_performance_mart.dim_team">
+		<columns names="team_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fact_team_standings" layers="0" collapse-mode="2" max-obj-count="13" z-value="0">
+	<schema name="team_standings_mart"/>
+	<role name="postgres"/>
+	<position x="60" y="1060"/>
+	<column name="team_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="season_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="league_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="matches_played">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="wins">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="loses">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="draws">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="points">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="final_position">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="goals">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="goals_conceded">
+		<type name="smallint" length="0"/>
+	</column>
+</table>
+
+<table name="dim_team" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="team_standings_mart"/>
+	<role name="postgres"/>
+	<position x="560" y="1040"/>
+	<column name="team_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="team_name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="common_name">
+		<type name="varchar" length="256"/>
+	</column>
+	<constraint name="dim_team_pk" type="pk-constr" table="team_standings_mart.dim_team">
+		<columns names="team_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="team_standings_mart"/>
+	<role name="postgres"/>
+	<position x="560" y="1180"/>
+	<column name="season_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="dim_season_pk" type="pk-constr" table="team_standings_mart.dim_season">
+		<columns names="season_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_league" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="team_standings_mart"/>
+	<role name="postgres"/>
+	<position x="560" y="1300"/>
+	<column name="league_id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="tier">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="dim_league_pk" type="pk-constr" table="team_standings_mart.dim_league">
+		<columns names="league_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -293,10 +773,22 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="name" ref-type="dst-columns"/>
 </constraint>
 
+<constraint name="primary_position_positions_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="core.positions" table="core.players">
+	<columns names="primary_position" ref-type="src-columns"/>
+	<columns names="position" ref-type="dst-columns"/>
+</constraint>
+
 <constraint name="association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.associations" table="core.teams">
 	<columns names="team_id" ref-type="src-columns"/>
 	<columns names="association_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="home_stadium_stadiums_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.stadiums" table="core.teams">
+	<columns names="home_stadium" ref-type="src-columns"/>
+	<columns names="stadium_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="association_country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
@@ -389,16 +881,94 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="association_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="team_teams_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.teams" table="core.team_statitics">
+<constraint name="players_teams_players_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.players" table="core.players_teams">
+	<columns names="player_id" ref-type="src-columns"/>
+	<columns names="player_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="players_teams_seasons_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.seasons" table="core.players_teams">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="players_teams_teams_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.teams" table="core.players_teams">
 	<columns names="team_id" ref-type="src-columns"/>
 	<columns names="team_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="season_seasons_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="core.seasons" table="core.team_statitics">
+<constraint name="dim_match_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="match_performance_mart.dim_match" table="match_performance_mart.fact_match_performance">
+	<columns names="match_id" ref-type="src-columns"/>
+	<columns names="match_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="dim_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="match_performance_mart.dim_season" table="match_performance_mart.fact_match_performance">
 	<columns names="season_id" ref-type="src-columns"/>
 	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="dim_home_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="match_performance_mart.dim_team" table="match_performance_mart.fact_match_performance">
+	<columns names="team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fim_away_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="match_performance_mart.dim_team" table="match_performance_mart.fact_match_performance">
+	<columns names="opponent_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="dim_league_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="match_performance_mart.dim_league" table="match_performance_mart.fact_match_performance">
+	<columns names="league_id" ref-type="src-columns"/>
+	<columns names="league_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_player_performance_dim_player_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="player_performance_mart.dim_player" table="player_performance_mart.fact_player_performance">
+	<columns names="player_id" ref-type="src-columns"/>
+	<columns names="player_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_player_performance_dim_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="player_performance_mart.dim_season" table="player_performance_mart.fact_player_performance">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_player_performance_dim_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="player_performance_mart.dim_team" table="player_performance_mart.fact_player_performance">
+	<columns names="team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_player_performance_dim_league_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="player_performance_mart.dim_league" table="player_performance_mart.fact_player_performance">
+	<columns names="league_id" ref-type="src-columns"/>
+	<columns names="league_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_standings_dim_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="team_standings_mart.dim_team" table="team_standings_mart.fact_team_standings">
+	<columns names="team_id" ref-type="src-columns"/>
+	<columns names="team_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_standings_dim_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="team_standings_mart.dim_season" table="team_standings_mart.fact_team_standings">
+	<columns names="season_id" ref-type="src-columns"/>
+	<columns names="season_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fact_standings_dim_league_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="team_standings_mart.dim_league" table="team_standings_mart.fact_team_standings">
+	<columns names="league_id" ref-type="src-columns"/>
+	<columns names="league_id" ref-type="dst-columns"/>
 </constraint>
 
 <relationship name="rel_associations_country" type="relfk" layers="0"
@@ -480,11 +1050,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="core.associations" reference-fk="child_association_associations_fk"
 	 src-required="false" dst-required="true"/>
 
-<relationship name="rel_team_statitics_teams" type="relfk" layers="0"
-	 src-table="core.team_statitics"
-	 dst-table="core.teams" reference-fk="team_teams_fk"
-	 src-required="false" dst-required="true"/>
-
 <relationship name="rel_player_statistics_seasons" type="relfk" layers="0"
 	 src-table="core.player_statistics"
 	 dst-table="core.seasons" reference-fk="season_seasons_fk"
@@ -495,13 +1060,89 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="core.players" reference-fk="player_players_fk"
 	 src-required="false" dst-required="true"/>
 
-<relationship name="rel_team_statitics_seasons" type="relfk" layers="0"
-	 src-table="core.team_statitics"
-	 dst-table="core.seasons" reference-fk="season_seasons_fk"
-	 src-required="false" dst-required="true">
-	<label ref-type="name-label">
-		<position x="65.1436" y="4.74701"/>
-	</label>
-</relationship>
+<relationship name="rel_players_positions" type="relfk" layers="0"
+	 src-table="core.players"
+	 dst-table="core.positions" reference-fk="primary_position_positions_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_players_teams_players" type="relfk" layers="0"
+	 src-table="core.players_teams"
+	 dst-table="core.players" reference-fk="players_teams_players_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_players_teams_seasons" type="relfk" layers="0"
+	 src-table="core.players_teams"
+	 dst-table="core.seasons" reference-fk="players_teams_seasons_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_players_teams_teams" type="relfk" layers="0"
+	 src-table="core.players_teams"
+	 dst-table="core.teams" reference-fk="players_teams_teams_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_teams_stadiums" type="relfk" layers="0"
+	 src-table="core.teams"
+	 dst-table="core.stadiums" reference-fk="home_stadium_stadiums_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_match_performance_dim_match" type="relfk" layers="0"
+	 src-table="match_performance_mart.fact_match_performance"
+	 dst-table="match_performance_mart.dim_match" reference-fk="dim_match_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_match_performance_dim_season" type="relfk" layers="0"
+	 src-table="match_performance_mart.fact_match_performance"
+	 dst-table="match_performance_mart.dim_season" reference-fk="dim_season_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_match_performance_dim_team" type="relfk" layers="0"
+	 src-table="match_performance_mart.fact_match_performance"
+	 dst-table="match_performance_mart.dim_team" reference-fk="dim_home_team_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_match_performance_dim_team1" type="relfk" layers="0"
+	 src-table="match_performance_mart.fact_match_performance"
+	 dst-table="match_performance_mart.dim_team" reference-fk="fim_away_team_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_match_performance_dim_league" type="relfk" layers="0"
+	 src-table="match_performance_mart.fact_match_performance"
+	 dst-table="match_performance_mart.dim_league" reference-fk="dim_league_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_team_standings_dim_team" type="relfk" layers="0"
+	 src-table="team_standings_mart.fact_team_standings"
+	 dst-table="team_standings_mart.dim_team" reference-fk="fact_standings_dim_team_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_team_standings_dim_season" type="relfk" layers="0"
+	 src-table="team_standings_mart.fact_team_standings"
+	 dst-table="team_standings_mart.dim_season" reference-fk="fact_standings_dim_season_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_team_standings_dim_league" type="relfk" layers="0"
+	 src-table="team_standings_mart.fact_team_standings"
+	 dst-table="team_standings_mart.dim_league" reference-fk="fact_standings_dim_league_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_player_performance_dim_player" type="relfk" layers="0"
+	 src-table="player_performance_mart.fact_player_performance"
+	 dst-table="player_performance_mart.dim_player" reference-fk="fact_player_performance_dim_player_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_player_performance_dim_season" type="relfk" layers="0"
+	 src-table="player_performance_mart.fact_player_performance"
+	 dst-table="player_performance_mart.dim_season" reference-fk="fact_player_performance_dim_season_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_player_performance_dim_team" type="relfk" layers="0"
+	 src-table="player_performance_mart.fact_player_performance"
+	 dst-table="player_performance_mart.dim_team" reference-fk="fact_player_performance_dim_team_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fact_player_performance_dim_league" type="relfk" layers="0"
+	 src-table="player_performance_mart.fact_player_performance"
+	 dst-table="player_performance_mart.dim_league" reference-fk="fact_player_performance_dim_league_fk"
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>
