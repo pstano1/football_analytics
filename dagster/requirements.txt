@@ -1,0 +1,11 @@
+dagster
+dagster-postgres
+dagster-docker
+dagster-graphql
+dagster-webserver
+dagit
+pandas
+sqlalchemy
+requests
+psycopg2-binary
+

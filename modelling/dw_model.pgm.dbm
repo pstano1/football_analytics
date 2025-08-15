@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="40"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,0" last-zoom="0.65" scene-rect="0,0,2610.24,1428.32"
+	 last-position="0,0" last-zoom="0.65" scene-rect="0,0,2602.56,1428.32"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -86,19 +86,28 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="countries" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<table name="countries" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
 	<position x="680" y="60"/>
-	<column name="name">
+	<column name="name" not-null="true">
 		<type name="varchar" length="128"/>
 	</column>
+	<column name="code" not-null="true">
+		<type name="varchar" length="2"/>
+	</column>
+	<constraint name="countries_pk" type="pk-constr" table="core.countries">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="constraint_code_unique" type="uq-constr" table="core.countries">
+		<columns names="code" ref-type="src-columns"/>
+	</constraint>
 </table>
 
 <table name="associations" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="900" y="60"/>
+	<position x="960" y="60"/>
 	<column name="association_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -108,7 +117,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="short_name">
 		<type name="varchar" length="32"/>
 	</column>
-	<column name="country" not-null="true">
+	<column name="country">
 		<type name="varchar" length="128"/>
 	</column>
 	<constraint name="associations_pk" type="pk-constr" table="core.associations">
@@ -152,24 +161,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="leagues_seasons" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+<table name="leagues_seasons" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="360" y="240"/>
-	<column name="leagues_seasons_id" not-null="true">
+	<position x="360" y="320"/>
+	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="league_id">
+	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="season_id">
-		<type name="uuid" length="0"/>
-	</column>
-	<constraint name="league_season_unique" type="uq-constr" table="core.leagues_seasons">
-		<columns names="leagues_seasons_id,league_id" ref-type="src-columns"/>
-	</constraint>
 	<constraint name="leagues_seasons_pk" type="pk-constr" table="core.leagues_seasons">
-		<columns names="leagues_seasons_id" ref-type="src-columns"/>
+		<columns names="league_id,season_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -495,7 +498,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="team_name">
+	<column name="team_name" not-null="true">
 		<type name="varchar" length="256"/>
 	</column>
 	<constraint name="dim_team_pk" type="pk-constr" table="match_performance_mart.dim_team">
@@ -557,7 +560,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fact_player_performance" layers="0" collapse-mode="2" max-obj-count="16" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1900" y="820"/>
+	<position x="1580" y="820"/>
 	<column name="player_id">
 		<type name="uuid" length="0"/>
 	</column>
@@ -605,7 +608,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_player" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2360" y="820"/>
+	<position x="2060" y="820"/>
 	<column name="player_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -629,7 +632,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2360" y="1220"/>
+	<position x="2080" y="980"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -644,7 +647,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_league" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1580" y="820"/>
+	<position x="2080" y="1100"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -662,7 +665,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_team" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1580" y="1220"/>
+	<position x="2080" y="1220"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -953,19 +956,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="league_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="fact_standings_dim_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+<constraint name="dim_standings_team_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="team_standings_mart.dim_team" table="team_standings_mart.fact_team_standings">
 	<columns names="team_id" ref-type="src-columns"/>
 	<columns names="team_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="fact_standings_dim_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+<constraint name="dim_standings_season_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="team_standings_mart.dim_season" table="team_standings_mart.fact_team_standings">
 	<columns names="season_id" ref-type="src-columns"/>
 	<columns names="season_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="fact_standings_dim_league_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+<constraint name="dim_standings_league_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="team_standings_mart.dim_league" table="team_standings_mart.fact_team_standings">
 	<columns names="league_id" ref-type="src-columns"/>
 	<columns names="league_id" ref-type="dst-columns"/>
@@ -974,7 +977,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <relationship name="rel_associations_country" type="relfk" layers="0"
 	 src-table="core.associations"
 	 dst-table="core.countries" reference-fk="association_country_fk"
-	 src-required="false" dst-required="true"/>
+	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_players_country" type="relfk" layers="0"
 	 src-table="core.players"
@@ -1112,17 +1115,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="rel_fact_team_standings_dim_team" type="relfk" layers="0"
 	 src-table="team_standings_mart.fact_team_standings"
-	 dst-table="team_standings_mart.dim_team" reference-fk="fact_standings_dim_team_fk"
+	 dst-table="team_standings_mart.dim_team" reference-fk="dim_standings_team_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_fact_team_standings_dim_season" type="relfk" layers="0"
 	 src-table="team_standings_mart.fact_team_standings"
-	 dst-table="team_standings_mart.dim_season" reference-fk="fact_standings_dim_season_fk"
+	 dst-table="team_standings_mart.dim_season" reference-fk="dim_standings_season_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_fact_team_standings_dim_league" type="relfk" layers="0"
 	 src-table="team_standings_mart.fact_team_standings"
-	 dst-table="team_standings_mart.dim_league" reference-fk="fact_standings_dim_league_fk"
+	 dst-table="team_standings_mart.dim_league" reference-fk="dim_standings_league_fk"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_fact_player_performance_dim_player" type="relfk" layers="0"

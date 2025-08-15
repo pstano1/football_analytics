@@ -1,0 +1,116 @@
+services:
+  minerva-amundsen-frontend:
+    image: amundsendev/amundsen-frontend:latest
+    container_name: ${PROJECT_NAME}_amundsen_frontend
+    ports:
+      - "${AMUNDSEN_FRONTEND_PORT}:5000"
+    environment:
+      - SEARCHSERVICE_BASE=http://minerva-amundsen-search:${AMUNDSEN_SEARCH_PORT}
+      - METADATASERVICE_BASE=http://minerva-amundsen-metadata:${AMUNDSEN_METADATA_PORT}
+    depends_on:
+      - minerva-amundsen-search
+      - minerva-amundsen-metadata
+    networks:
+      - ${PROJECT_NAME}_net
+
+  minerva-amundsen-metadata:
+    image: amundsendev/amundsen-metadata:latest
+    container_name: ${PROJECT_NAME}_amundsen_metadata
+    ports:
+      - "${AMUNDSEN_METADATA_PORT}:5002"
+    environment:
+      - NEO4J_ENDPOINT=bolt://minerva-amundsen-neo4j:${AMUNDSEN_NEO4J_BOLT_PORT}
+    depends_on:
+      - minerva-amundsen-neo4j
+    networks:
+      - ${PROJECT_NAME}_net
+
+  minerva-amundsen-search:
+    image: amundsendev/amundsen-search:latest
+    container_name: ${PROJECT_NAME}_amundsen_search
+    ports:
+      - "${AMUNDSEN_SEARCH_PORT}:5001"
+    networks:
+      - ${PROJECT_NAME}_net
+
+  minerva-amundsen-neo4j:
+    image: neo4j:3.5
+    platform: linux/amd64  
+    container_name: ${PROJECT_NAME}_amundsen_neo4j
+    ports:
+      - "${AMUNDSEN_NEO4J_HTTP_PORT}:7474"
+      - "${AMUNDSEN_NEO4J_BOLT_PORT}:7687"
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+    volumes:
+      - ${PROJECT_NAME}_neo4j_data:/data
+    networks:
+      - ${PROJECT_NAME}_net
+
+  minerva_postgres:
+    image: postgres:13
+    container_name: ${PROJECT_NAME}_postgres
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d
+      - ${PROJECT_NAME}_postgres_data:/var/lib/postgresql/data
+    networks:
+      - ${PROJECT_NAME}_net 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d postgres_db"]
+      interval: 10s
+      timeout: 8s
+      retries: 5 
+
+  minerva-dagster-webserver:
+    build:
+      context: ./dagster
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME}_dagster_webserver
+    ports:
+      - '3000:3000'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: ${PROJECT_NAME}_postgres
+    networks:
+      - ${PROJECT_NAME}_net
+    #depends_on:
+      #minerva_postgres:
+       # condition: service_healthy
+
+  minerva-dagster-daemon:
+    build:
+      context: ./dagster
+      dockerfile: Dockerfile
+    command: "dagster-daemon run"
+    container_name: ${PROJECT_NAME}_dagster_daemon
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: ${PROJECT_NAME}_postgres
+    volumes: 
+      - minerva_postgres_data:/var/lib/postgresql/data  
+    networks:
+      - ${PROJECT_NAME}_net
+    #depends_on:
+      #minerva_postgres:
+      #  condition: service_healthy
+ 
+volumes:
+  minerva_neo4j_data:
+  minerva_postgres_data:
+
+networks:
+  minerva_net:
+    driver: bridge
+
