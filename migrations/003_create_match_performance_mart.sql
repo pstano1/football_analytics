@@ -2,7 +2,7 @@ CREATE SCHEMA mart_match_performance;
 
 CREATE TABLE mart_match_performance.dim_team(
     team_id   UUID PRIMARY KEY,
-    team_name VARCHAR(256) NOT NULL,
+    team_name VARCHAR(256) NOT NULL
 );
 
 CREATE TABLE mart_match_performance.dim_league(

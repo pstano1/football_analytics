@@ -17,10 +17,9 @@ def extract_associations() -> pd.DataFrame:
 
 @op
 def transform_associations(federations: pd.DataFrame) -> pd.DataFrame:
-    clean_federations = federations.dropna()
-    clean_federations = clean_federations.drop_duplicates()
-    clean_federations[["associationName", "associationCode"]] = clean_federations["FIFA.MemberAssociation"].str.extract(r"^(.*) \((.*)\)$")
-    clean_federations = clean_federations.drop(columns=[
+    federations = federations.drop_duplicates()
+    federations[["associationName", "associationCode"]] = federations["FIFA.MemberAssociation"].str.extract(r"^(.*) \((.*)\)$")
+    federations = federations.drop(columns=[
         "ContinentalConfederation.Name",
         "Subdivision.Iso3166.Code", 
         "FIFA.MemberAssociation",
@@ -28,22 +27,21 @@ def transform_associations(federations: pd.DataFrame) -> pd.DataFrame:
         "FIFA.Joined",
         "Established"
     ])
-    clean_federations.rename(columns={
+    federations.rename(columns={
         "Country.Iso3166.Alpha2Code": "countryCode",
         "FIFA.Code": "codeName",
         "ContinentalConfederation.Code": "continentalConfederationCode"
     }, inplace=True)
 
-    return clean_federations
+    return federations
 
 @op
 def load_associations(federations: pd.DataFrame) -> int:
     inserted_rows = 0
-    #engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
-    #    f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
-    #    f"/{os.environ['POSTGRES_DB']}"
-    #)
-    engine = create_engine(f"postgresql+psycopg2://root:qq@minerva_postgres:5432/minerva")
+    engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
+        f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
+        f"/{os.environ['POSTGRES_DB']}"
+    )
     with engine.begin() as connection:
       countries = pd.read_sql(
           "SELECT code, name FROM core.countries", 
@@ -57,7 +55,7 @@ def load_associations(federations: pd.DataFrame) -> int:
       fifa_id = name_to_id["FIFA"]
       continentals = ["UEFA", "AFC", "CAF", "CONCACAF", "CONMEBOL", "OFC"]
       for continental in continentals:
-        connection.execute(text('''INSERT INTO core.association_relations(
+        connection.execute(text('''INSERT INTO core.associations_self_relations(
             parent_association, 
             child_association
         ) VALUES (
@@ -69,9 +67,11 @@ def load_associations(federations: pd.DataFrame) -> int:
         })
 
       for _, row in federations.iterrows():
+        if row["countryCode"] not in code_to_country_name_map:
+            continue
         id = str(uuid.uuid4())
         connection.execute(text('''INSERT INTO core.associations(
-          id,
+          association_id,
           full_name,
           short_name,
           country
@@ -80,22 +80,22 @@ def load_associations(federations: pd.DataFrame) -> int:
           :full_name,
           :short_name,
           :country
-        ) ON CONFLICT (short_name) DO NOTHING'''), {
+        )'''), {
             "id": id,
             "full_name": row["associationName"],
             "short_name": row["associationCode"],
             "country": code_to_country_name_map[row["countryCode"]]
         })
 
-        connection.execute(text('''INSERT INTO core.association_relations(
-          parent_id, 
-          child_id
+        connection.execute(text('''INSERT INTO core.associations_self_relations(
+          parent_association, 
+          child_association
         ) VALUES (
             :parent_association, 
             :child_association
         ) ON CONFLICT (parent_association, child_association) DO NOTHING'''), {
-            "parent_id": name_to_id[row["continentalConfederationCode"]], 
-            "child_id": id
+            "parent_association": name_to_id[row["continentalConfederationCode"]], 
+            "child_association": id
         })
         inserted_rows += 1
 

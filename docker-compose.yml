@@ -62,7 +62,7 @@ services:
     networks:
       - ${PROJECT_NAME}_net 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d postgres_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 8s
       retries: 5 
