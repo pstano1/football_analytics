@@ -5,8 +5,8 @@ services:
     ports:
       - "${AMUNDSEN_FRONTEND_PORT}:5000"
     environment:
-      - SEARCHSERVICE_BASE=http://minerva-amundsen-search:${AMUNDSEN_SEARCH_PORT}
-      - METADATASERVICE_BASE=http://minerva-amundsen-metadata:${AMUNDSEN_METADATA_PORT}
+      - SEARCHSERVICE_BASE=http://minerva-amundsen-search:5001
+      - METADATASERVICE_BASE=http://minerva-amundsen-metadata:5002
     depends_on:
       - minerva-amundsen-search
       - minerva-amundsen-metadata
@@ -19,7 +19,7 @@ services:
     ports:
       - "${AMUNDSEN_METADATA_PORT}:5002"
     environment:
-      - NEO4J_ENDPOINT=bolt://minerva-amundsen-neo4j:${AMUNDSEN_NEO4J_BOLT_PORT}
+      - PROXY_HOST=bolt://minerva-amundsen-neo4j
     depends_on:
       - minerva-amundsen-neo4j
     networks:
@@ -42,6 +42,8 @@ services:
       - "${AMUNDSEN_NEO4J_BOLT_PORT}:7687"
     environment:
       - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      - NEO4J_dbms_connector_bolt_listen__address=0.0.0.0:7687
+      - NEO4J_dbms_connector_http_listen__address=0.0.0.0:7474
     volumes:
       - ${PROJECT_NAME}_neo4j_data:/data
     networks:
