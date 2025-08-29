@@ -3,3 +3,10 @@
 **/__pycache__
 
 dagster_home/
+venv/
+
+_state/
+snapshot_cache/
+
+nodes/
+node.lock

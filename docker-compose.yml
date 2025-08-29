@@ -25,13 +25,38 @@ services:
     networks:
       - ${PROJECT_NAME}_net
 
+  minerva-elasticsearch:
+      image: elasticsearch:7.10.1
+      container_name: ${PROJECT_NAME}_elasticsearch
+      ports:
+          - 9200:9200
+      volumes:
+        - .:/usr/share/elasticsearch/data
+      networks:
+        - ${PROJECT_NAME}_net
+      ulimits:
+        nofile:
+          soft: 65536
+          hard: 65536
+      environment:
+        - discovery.type=single-node
+        - xpack.security.enabled=false
+        - ES_JAVA_OPTS=-Xms2g -Xmx2g
+        - cluster.routing.allocation.disk.watermark.low=70%
+        - cluster.routing.allocation.disk.watermark.high=85%
+        - cluster.routing.allocation.disk.watermark.flood_stage=95%
+
   minerva-amundsen-search:
     image: amundsendev/amundsen-search:latest
     container_name: ${PROJECT_NAME}_amundsen_search
     ports:
       - "${AMUNDSEN_SEARCH_PORT}:5001"
+    environment:
+      - PROXY_ENDPOINT=minerva-elasticsearch
     networks:
       - ${PROJECT_NAME}_net
+    depends_on:
+      - minerva-elasticsearch
 
   minerva-amundsen-neo4j:
     image: neo4j:3.5
@@ -101,7 +126,8 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_HOST: ${PROJECT_NAME}_postgres
     volumes: 
-      - minerva_postgres_data:/var/lib/postgresql/data  
+      - minerva_postgres_data:/var/lib/postgresql/data
+      - ./dagster/jobs:/jobs
     networks:
       - ${PROJECT_NAME}_net
     #depends_on:

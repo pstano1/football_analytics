@@ -1,6 +1,6 @@
-CREATE SCHEMA metadadata;
+CREATE SCHEMA metadata;
 
-CREATE TABLE etl_logs(
+CREATE TABLE metadata.etl_logs(
     log_id        UUID PRIMARY KEY,
     job_name      VARCHAR(128) NOT NULL,
     run_start     TIMESTAMP NOT NULL,
