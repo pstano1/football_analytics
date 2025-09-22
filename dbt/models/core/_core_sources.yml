@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: core
+    schema: core
+    tables:
+      - name: players
+      - name: teams
+      - name: leagues
+      - name: leagues_seasons
+      - name: countries
+      - name: associations
+      - name: seasons
+      - name: referees
+      - name: stadiums
+      - name: matches
+      - name: teams
+      - name: players_teams
+      - name: positions
+      - name: associations_self_relations
+      - name: player_statistics

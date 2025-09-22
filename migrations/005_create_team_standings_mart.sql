@@ -26,7 +26,6 @@ CREATE TABLE mart_team_standings.fact_team_standings(
     loses          SMALLINT,
     draws          SMALLINT,
     points         SMALLINT,
-    final_position SMALLINT,
     goals          SMALLINT,
     goals_conceded SMALLINT,
 

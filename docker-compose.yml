@@ -133,7 +133,18 @@ services:
     #depends_on:
       #minerva_postgres:
       #  condition: service_healthy
- 
+
+  minerva-dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:latest
+    container_name: ${PROJECT_NAME}_dbt
+    volumes:
+      - ./dbt:/usr/app
+    working_dir: /usr/app
+    environment:
+      DBT_PROFILES_DIR: /usr/app
+    depends_on:
+      - ${PROJECT_NAME}_postgres
+
 volumes:
   minerva_neo4j_data:
   minerva_postgres_data:

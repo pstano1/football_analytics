@@ -153,3 +153,14 @@ CREATE TABLE core.matches(
     CONSTRAINT match_stadium_fk FOREIGN KEY (stadium_id) REFERENCES core.stadiums(stadium_id)
 );
 
+CREATE TABLE core.teams_leagues_seasons (
+    team_id   UUID NOT NULL,
+    league_id UUID NOT NULL,
+    season_id UUID NOT NULL,
+
+    CONSTRAINT teams_leagues_seasons_team_fk FOREIGN KEY (team_id) REFERENCES core.teams(team_id),
+    CONSTRAINT teams_leagues_seasons_league_fk FOREIGN KEY (league_id) REFERENCES core.leagues(league_id),
+    CONSTRAINT teams_leagues_seasons_season_fk FOREIGN KEY (season_id) REFERENCES core.seasons(season_id),
+    
+    PRIMARY KEY (team_id, season_id)
+);
