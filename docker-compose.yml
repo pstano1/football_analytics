@@ -107,6 +107,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PORT: 5432
       POSTGRES_HOST: ${PROJECT_NAME}_postgres
+    volumes:
+      - ./dbt:/dbt
     networks:
       - ${PROJECT_NAME}_net
     #depends_on:
@@ -125,9 +127,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PORT: 5432
       POSTGRES_HOST: ${PROJECT_NAME}_postgres
+      DAGSTER_CODE_SERVER_HEARTBEAT_TIMEOUT: 60
     volumes: 
       - minerva_postgres_data:/var/lib/postgresql/data
       - ./dagster/jobs:/jobs
+      - ./dbt:/dbt
     networks:
       - ${PROJECT_NAME}_net
     #depends_on:

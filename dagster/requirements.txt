@@ -3,6 +3,9 @@ dagster-postgres
 dagster-docker
 dagster-graphql
 dagster-webserver
+dagster-dbt
+dbt-core
+dbt-postgres
 dagit
 pandas
 sqlalchemy

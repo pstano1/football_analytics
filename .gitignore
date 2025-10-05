@@ -10,3 +10,7 @@ snapshot_cache/
 
 nodes/
 node.lock
+
+**/.user.yml
+dbt/logs/
+dbt/target/

@@ -14,8 +14,8 @@ sources:
       - name: referees
       - name: stadiums
       - name: matches
-      - name: teams
       - name: players_teams
       - name: positions
       - name: associations_self_relations
       - name: player_statistics
+      - name: teams_leagues_seasons

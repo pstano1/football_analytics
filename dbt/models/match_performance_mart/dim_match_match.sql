@@ -1,3 +1,8 @@
+{{ config(
+    alias='dim_match',
+    schema='match_performance_mart'
+) }}
+
 SELECT
     m.match_id,
     m.attendence,

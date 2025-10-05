@@ -1,3 +1,8 @@
+{{ config(
+    alias='dim_player',
+    schema='player_performance_mart'
+) }}
+
 SELECT
     p.player_id,
     p.full_name,

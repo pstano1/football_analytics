@@ -1,0 +1,15 @@
+name: minerva_dbt
+version: '1.0'
+config-version: 2
+profile: minerva
+
+model-paths: ["models"]
+
+models:
+  minerva_dbt:
+    match_performance_mart:
+      +schema: match_performance_mart
+    player_performance_mart:
+      +schema: player_performance_mart
+    team_standings_mart:
+      +schema: team_standings_mart
