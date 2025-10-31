@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: core
+    schema: core
+    tables:
+      - name: fact_player_performance
+      - name: dim_player_player
+      - name: dim_league_player
+      - name: dim_season_player
+      - name: dim_team_player
+

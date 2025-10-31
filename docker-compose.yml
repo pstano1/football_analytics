@@ -149,9 +149,36 @@ services:
     depends_on:
       - ${PROJECT_NAME}_postgres
 
+  minerva-clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: ${PROJECT_NAME}_clickhouse
+    ports:
+      - "${CLICKHOUSE_HTTP_PORT:-8123}:8123"
+      - "${CLICKHOUSE_NATIVE_PORT:-9000}:9000"
+    environment:
+      - CLICKHOUSE_DB=${CLICKHOUSE_DB:-default}
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:-clickhouse123}
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    volumes:
+      - ${PROJECT_NAME}_clickhouse_data:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    networks:
+      - ${PROJECT_NAME}_net
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
 volumes:
   minerva_neo4j_data:
   minerva_postgres_data:
+  minerva_clickhouse_data:
 
 networks:
   minerva_net:
