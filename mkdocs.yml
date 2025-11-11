@@ -1,0 +1,15 @@
+site_name: Data Warehouse Docs
+docs_dir: docs/${LANG}
+site_dir: site/${LANG}
+
+theme:
+  name: mkdocs
+  language: ${LANG}
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - System Architecture: system_architecture.md
+  - Data Model: data_model.md
+  - Dagster Jobs: dagster_jobs.md 
+
