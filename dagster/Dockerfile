@@ -12,8 +12,9 @@ RUN apt-get update && \
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY dagster.yaml workspace.yaml . 
+COPY dagster.yaml workspace.yaml .
 COPY dags ./dags
+COPY jobs ./jobs
 
 EXPOSE 3000
 
