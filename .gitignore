@@ -17,3 +17,5 @@ dbt/target/
 
 mkdocs.build.yml
 site/
+
+notebooks/test.ipynb
