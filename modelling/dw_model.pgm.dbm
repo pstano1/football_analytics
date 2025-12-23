@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="44"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,0" last-zoom="0.65" scene-rect="0,0,2602.56,1428.32"
+	 last-position="34,23" last-zoom="0.95" scene-rect="-128,-1,2730.56,1429.32"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -65,7 +65,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="teams" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="480" y="60"/>
+	<position x="460" y="60"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -128,7 +128,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="seasons" layers="0" collapse-mode="1" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="660" y="260"/>
+	<position x="680" y="260"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -143,7 +143,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="leagues" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="80" y="380"/>
+	<position x="80" y="400"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -359,7 +359,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="associations_self_relations" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="320" y="760"/>
+	<position x="340" y="800"/>
 	<column name="parent_association" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -770,7 +770,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="teams_leagues_seasons" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="360" y="420"/>
+	<position x="400" y="420"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
