@@ -24,7 +24,7 @@ def extract_positions() -> pd.DataFrame:
         SELECT 
             Position
         FROM 
-            dbo.T_DIM_Players;
+            dbo.T_DIM_Player;
     """
 
     return pd.read_sql(query, engine)

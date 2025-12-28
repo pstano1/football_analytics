@@ -48,11 +48,14 @@ def load_referees(referees: pd.DataFrame) -> int:
     )
     with engine.begin() as connection:
         federations = pd.read_sql(
-          "SELECT association_id, country FROM core.federations", 
+          "SELECT association_id, country FROM core.associations", 
           connection
         )
         country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
         for _, row in referees.iterrows():
+            if row["Country"] not in country_to_association_map:
+                continue
+
             id = str(uuid.uuid4())
             connection.execute(text('''INSERT INTO core.referees(
                 referee_id,

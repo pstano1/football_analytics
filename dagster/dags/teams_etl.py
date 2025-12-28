@@ -22,7 +22,7 @@ def extract_teams() -> pd.DataFrame:
     )
     query = """
         SELECT * 
-        FROM dbo.T_DIM_TEAMS;
+        FROM dbo.T_DIM_Team;
     """
 
     return pd.read_sql(query, engine)
@@ -52,11 +52,14 @@ def load_teams(teams: pd.DataFrame) -> int:
     )
     with engine.begin() as connection:
         federations = pd.read_sql(
-          "SELECT association_id, country FROM core.federations", 
+          "SELECT association_id, country FROM core.associations", 
           connection
         )
         country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
         for _, row in teams.iterrows():
+            if row["Country"] not in country_to_association_map:
+                continue
+
             id = str(uuid.uuid4())
             connection.execute(text('''INSERT INTO core.teams(
                 team_id,

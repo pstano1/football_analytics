@@ -69,7 +69,7 @@ CREATE TABLE core.positions(
 CREATE TABLE core.players(
     player_id        UUID PRIMARY KEY,
     full_name        VARCHAR(256) NOT NULL,
-    birthdate        DATE,
+    birthday        DATE,
     primary_position VARCHAR(64),
     nationality      VARCHAR(128),
 

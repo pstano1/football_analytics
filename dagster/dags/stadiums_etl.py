@@ -37,7 +37,7 @@ def transform_stadiums(stadiums: pd.DataFrame) -> pd.DataFrame:
         "City",
         "EffectiveStartDate",
         "EffectiveEndDate",
-        "IsCapacity"
+        "IsCurrent"
     ])
 
     return stadiums

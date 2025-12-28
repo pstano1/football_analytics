@@ -34,7 +34,7 @@ def transform_leagues(leagues: pd.DataFrame) -> pd.DataFrame:
     leagues = leagues.drop(columns=[
         "InternationalScale", 
         "DomesticScale", 
-        "LegueSK", 
+        "League_id", 
     ])
 
     return leagues
@@ -49,11 +49,14 @@ def load_leagues(leagues: pd.DataFrame) -> int:
     )
     with engine.begin() as connection:
         federations = pd.read_sql(
-          "SELECT association_id, country FROM core.federations", 
+          "SELECT association_id, country FROM core.associations", 
           connection
         )
         country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
         for _, row in leagues.iterrows():
+            if row["Country"] not in country_to_association_map:
+                continue
+
             id = str(uuid.uuid4())
             connection.execute(text('''INSERT INTO core.leagues(
                 league_id,
@@ -84,7 +87,7 @@ def load_league_seasons(leagues: pd.DataFrame) -> int:
     )
     with engine.begin() as connection:
         result = connection.execute(text("""
-            INSERT INTO core.league_seasons (
+            INSERT INTO core.leagues_seasons (
                 league_id, 
                 season_id
             ) SELECT 
