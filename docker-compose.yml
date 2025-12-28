@@ -95,6 +95,7 @@ services:
       retries: 5 
 
   minerva-dagster-webserver:
+    platform: linux/amd64
     build:
       context: ./dagster
       dockerfile: Dockerfile
@@ -107,15 +108,22 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PORT: 5432
       POSTGRES_HOST: ${PROJECT_NAME}_postgres
+      SOURCE_MSSQL_USER: ${SOURCE_MSSQL_USER}
+      SOURCE_MSSQL_PASSWORD: ${SOURCE_MSSQL_PASSWORD}
+      SOURCE_MSSQL_DB: ${SOURCE_MSSQL_DB}
+      SOURCE_MSSQL_PORT: ${SOURCE_MSSQL_PORT}
+      SOURCE_MSSQL_HOST: mssql_db
     volumes:
       - ./dbt:/dbt
     networks:
       - ${PROJECT_NAME}_net
+      - multi-container-project_default
     #depends_on:
       #minerva_postgres:
        # condition: service_healthy
 
   minerva-dagster-daemon:
+    platform: linux/amd64
     build:
       context: ./dagster
       dockerfile: Dockerfile
@@ -128,12 +136,18 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_HOST: ${PROJECT_NAME}_postgres
       DAGSTER_CODE_SERVER_HEARTBEAT_TIMEOUT: 60
+      SOURCE_MSSQL_USER: ${SOURCE_MSSQL_USER}
+      SOURCE_MSSQL_PASSWORD: ${SOURCE_MSSQL_PASSWORD}
+      SOURCE_MSSQL_DB: ${SOURCE_MSSQL_DB}
+      SOURCE_MSSQL_PORT: ${SOURCE_MSSQL_PORT}
+      SOURCE_MSSQL_HOST: mssql_db
     volumes: 
       - minerva_postgres_data:/var/lib/postgresql/data
       - ./dagster/jobs:/jobs
       - ./dbt:/dbt
     networks:
       - ${PROJECT_NAME}_net
+      - multi-container-project_default
     #depends_on:
       #minerva_postgres:
       #  condition: service_healthy
@@ -183,4 +197,6 @@ volumes:
 networks:
   minerva_net:
     driver: bridge
+  multi-container-project_default:
+    external: true
 

@@ -12,3 +12,4 @@ sqlalchemy
 requests
 psycopg2-binary
 amundsen-databuilder
+pyodbc

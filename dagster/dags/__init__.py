@@ -3,19 +3,39 @@ from dagster_dbt import DbtProject, DbtCliResource, dbt_assets
 import os
 import subprocess
 from .associations_etl import associations_etl
+from .leagues_etl import leagues_etl
+from .matches_etl import matches_etl
+from .players_etl import players_etl
+from .positions_etl import positions_etl
+from .referees_etl import referees_etl
+from .stadiums_etl import stadiums_etl
+from .team_league_season_etl import teams_leagues_seasons_etl
+from .teams_etl import teams_etl
 
 def make_defs():
     print("=" * 50)
     print("STARTING make_defs()")
     print("=" * 50)
     
+    all_jobs = [
+        associations_etl, 
+        leagues_etl, 
+        matches_etl, 
+        players_etl, 
+        positions_etl, 
+        referees_etl, 
+        stadiums_etl, 
+        teams_leagues_seasons_etl, 
+        teams_etl
+    ]
+
     dbt_project_dir = "/dbt"
     profiles_dir = "/dbt"
     
     print(f"Checking if {dbt_project_dir} exists...")
     if not os.path.exists(dbt_project_dir):
         print(f"DBT project dir not found at {dbt_project_dir}. Skipping DBT asset load.")
-        return Definitions(jobs=[associations_etl])
+        return Definitions(jobs=all_jobs)
     
     print(f"✓ DBT project dir exists")
     
@@ -36,10 +56,10 @@ def make_defs():
         except subprocess.CalledProcessError as e:
             print(f"dbt parse failed with return code {e.returncode}")
             print(f"stdout: {e.stdout}")
-            return Definitions(jobs=[associations_etl])
+            return Definitions(jobs=all_jobs)
         except FileNotFoundError:
             print("dbt command not found. Is dbt-core installed?")
-            return Definitions(jobs=[associations_etl])
+            return Definitions(jobs=all_jobs)
     else:
         print(f"✓ Manifest exists")
     
@@ -71,7 +91,7 @@ def make_defs():
     print("Creating Definitions...")
     defs_obj = Definitions(
         assets=[my_dbt_assets],
-        jobs=[associations_etl],
+        jobs=all_jobs,
         resources={"dbt": dbt}
     )
     print(f"✓ Definitions created")

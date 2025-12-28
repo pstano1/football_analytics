@@ -13,10 +13,7 @@ CREATE TABLE core.countries(
 CREATE TABLE core.stadiums(
     stadium_id UUID PRIMARY KEY,
     name       VARCHAR(256) UNIQUE NOT NULL,
-    capacity   INTEGER,
-    country    VARCHAR(128) NOT NULL,
-
-    CONSTRAINT stadium_country_fk FOREIGN KEY (country) REFERENCES core.countries(name)
+    capacity   INTEGER
 );
 
 CREATE TABLE core.associations(

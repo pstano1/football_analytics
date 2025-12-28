@@ -7,7 +7,7 @@ import os
 import uuid
 
 @op
-def extract_leagues() -> pd.DataFrame:
+def extract_referees() -> pd.DataFrame:
     params = urllib.parse.quote_plus(
         "DRIVER={ODBC Driver 18 for SQL Server};"
         f"SERVER={os.environ['SOURCE_MSSQL_HOST']},{os.environ['SOURCE_MSSQL_PORT']};"
@@ -22,26 +22,25 @@ def extract_leagues() -> pd.DataFrame:
     )
     query = """
         SELECT * 
-        FROM dbo.T_DIM_League;
+        FROM dbo.T_DIM_Referees;
     """
 
     return pd.read_sql(query, engine)
 
 
 @op
-def transform_leagues(leagues: pd.DataFrame) -> pd.DataFrame:
-    leagues.drop_duplicates()
-    leagues = leagues.drop(columns=[
-        "InternationalScale", 
-        "DomesticScale", 
-        "LegueSK", 
+def transform_referees(referees: pd.DataFrame) -> pd.DataFrame:
+    referees.drop_duplicates()
+    referees = referees.drop(columns=[
+        "Referee_Id", 
+        "birthdayGMT"
     ])
 
-    return leagues
+    return referees
 
 
 @op
-def load_leagues(leagues: pd.DataFrame) -> int:
+def load_referees(referees: pd.DataFrame) -> int:
     inserted_rows = 0
     engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
         f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
@@ -53,54 +52,26 @@ def load_leagues(leagues: pd.DataFrame) -> int:
           connection
         )
         country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
-        for _, row in leagues.iterrows():
+        for _, row in referees.iterrows():
             id = str(uuid.uuid4())
-            connection.execute(text('''INSERT INTO core.leagues(
-                league_id,
-                name,
-                tier,
+            connection.execute(text('''INSERT INTO core.referees(
+                referee_id,
+                full_name,
                 association_id
             ) VALUES (
                 :id,
                 :full_name,
-                :tier,
                 :association_id
             )'''), {
                 "id": id,
-                "full_name": row["LeagueName"],
-                "tier": row["Division"],
-                "association_id": country_to_association_map[row["Country"]]
+                "full_name": f"{row['FirstName']} {row['LastName']}",
+                "association_id": country_to_association_map[row["Nationality"]]
             })
 
             inserted_rows += 1
 
     return inserted_rows
 
-@op
-def load_league_seasons(leagues: pd.DataFrame) -> int:
-    engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
-        f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
-        f"/{os.environ['POSTGRES_DB']}"
-    )
-    with engine.begin() as connection:
-        result = connection.execute(text("""
-            INSERT INTO core.league_seasons (
-                league_id, 
-                season_id
-            ) SELECT 
-                l.league_id, 
-                s.season_id
-            FROM core.leagues l
-            CROSS JOIN core.seasons s
-            ON CONFLICT DO NOTHING;
-        """))
-
-        return result.rowcount
-
 @job
-def leagues_etl():
-    leagues_df = transform_leagues(extract_leagues())
-
-    load_leagues(leagues_df)
-    load_league_seasons(leagues_df)
-
+def referees_etl():
+    load_referees(transform_referees(extract_referees()))

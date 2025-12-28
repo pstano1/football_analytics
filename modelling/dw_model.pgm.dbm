@@ -3,9 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="44"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="43"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="34,23" last-zoom="0.95" scene-rect="-128,-1,2730.56,1429.32"
+	 last-position="46,33" last-zoom="0.95" scene-rect="-128,-1,2730.56,1429.32"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -128,7 +128,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="seasons" layers="0" collapse-mode="1" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="680" y="260"/>
+	<position x="700" y="260"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -287,7 +287,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="stadiums" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+<table name="stadiums" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
 	<position x="1300" y="240"/>
@@ -299,9 +299,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="capacity">
 		<type name="integer" length="0"/>
-	</column>
-	<column name="country" not-null="true">
-		<type name="varchar" length="128"/>
 	</column>
 	<constraint name="name_unique" type="uq-constr" table="core.stadiums">
 		<columns names="name" ref-type="src-columns"/>
@@ -866,12 +863,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="association_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="country_countries_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.countries" table="core.stadiums">
-	<columns names="country" ref-type="src-columns"/>
-	<columns names="name" ref-type="dst-columns"/>
-</constraint>
-
 <constraint name="player_players_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="core.players" table="core.player_statistics">
 	<columns names="player_id" ref-type="src-columns"/>
@@ -1048,11 +1039,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="core.matches"
 	 dst-table="core.referees" reference-fk="referee_referees_fk"
 	 src-required="false" dst-required="false"/>
-
-<relationship name="rel_stadiums_countries" type="relfk" layers="0"
-	 src-table="core.stadiums"
-	 dst-table="core.countries" reference-fk="country_countries_fk"
-	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_matches_stadiums" type="relfk" layers="0"
 	 src-table="core.matches"

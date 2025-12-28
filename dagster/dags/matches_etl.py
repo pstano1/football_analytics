@@ -22,8 +22,21 @@ def extract_matches() -> pd.DataFrame:
         fast_executemany=True
     )
     query = """
-        SELECT * 
-        FROM dbo.T_F_Match_Stats;
+        SELECT
+            m.*,
+            r.FirstName AS ref_name,
+            r.LastName AS ref_surname,
+            v.VenueName AS stadium_name
+            s.StartingYear AS season_starting_year,
+            s.EndingYear AS season_ending_year
+        FROM 
+            dbo.T_F_Match_Stats m
+        JOIN 
+            dbo.T_DIM_Referees r ON r.Referee_Id = m.Referee_id
+        JOIN
+            dbo.T_DIM_Venue v ON v.VenueSK = m.VenueSK
+        JOIN
+            dbo.T_DIM_Season s ON s.SeasonSK = m.SeasonSK;
     """
 
     return pd.read_sql(query, engine)
@@ -54,6 +67,76 @@ def transform_matches(matches: pd.DataFrame) -> pd.DataFrame:
     return matches_cleaned
 
 
+def normalize_name(name: str) -> str:
+    return (
+        name.strip()
+            .lower()
+            .replace("  ", " ")
+    )
+
+
+def load_referee_lookup(engine) -> dict:
+    result = engine.execute(
+        text("SELECT referee_id, full_name FROM core.referees")
+    )
+
+    lookup = {}
+    for row in result:
+        lookup[normalize_name(row.full_name)] = row.referee_id
+
+    return lookup
+
+
+def load_stadium_lookup(engine) -> dict:
+    result = engine.execute(
+        text("SELECT stadium_id, name FROM core.stadiums")
+    )
+
+    lookup = {}
+    for row in result:
+        lookup[normalize_name(row.name)] = row.stadium_id
+
+    return lookup
+
+
+def load_teams_lookup(engine) -> dict:
+    result = engine.execute(
+        text("SELECT team_id, team_name, common_name FROM core.teams")
+    )
+
+    lookup = {}
+    for row in result:
+        if row.team_name:
+            lookup[normalize_name(row.team_name)] = row.team_id
+
+        if row.common_name:
+            lookup[normalize_name(row.common_name)] = row.team_id
+
+    return lookup
+
+
+def normalize_season_name(start, end) -> str:
+    ending = int(end)
+    staring = int(start)
+    if (staring == ending):
+        ending += 1
+
+    return f"{staring}/{ending}"
+
+
+def load_season_lookup(engine) -> dict:
+    result = engine.execute(
+        text("SELECT season_id, name FROM core.seasons")
+    )
+
+    lookup = {}
+    for row in result:
+        if row.season_name:
+            lookup[row.name] = row.season_id
+
+    return lookup
+
+
 @op
 def load_matches(matches: pd.DataFrame) -> int:
     inserted_rows = 0
@@ -62,8 +145,31 @@ def load_matches(matches: pd.DataFrame) -> int:
         f"/{os.environ['POSTGRES_DB']}"
     )
     with engine.begin() as connection:
+       referee_lookup = load_referee_lookup(connection)
+       stadium_lookup = load_stadium_lookup(connection)
+       team_lookup = load_teams_lookup(connection)
+       season_lookup = load_season_lookup(connection)
+
        for _, row in matches.iterrows():
             id = str(uuid.uuid4())
+
+            referee_full_name = normalize_name(
+                f"{row['ref_name']} {row['ref_surname']}"
+            )
+            referee_id = referee_lookup.get(referee_full_name)
+            stadium_id = stadium_lookup.get(
+                normalize_name(row["stadium_name"])
+            )
+            home_team_id = team_lookup(
+                normalize_name(row["home_team_name"])
+            )
+            away_team_id = team_lookup(
+                normalize_name(row["away_team_name"])
+            )
+            season_id = season_lookup(
+                normalize_season_name(row["season_starting_year"], row["season_ending_year"])
+            )
+
             connection.execute(text('''INSERT INTO core.matches(
                 match_id,
                 date,
@@ -124,12 +230,12 @@ def load_matches(matches: pd.DataFrame) -> int:
             )'''), {
                 "id": id,
                 "date": row["date"],
-                "home_team_id": "do a lookup here",
-                "away_team_id": "do a lookup here as well",
-                "season_id": "here need a lookup as well",
-                "referee_id": None,
-                "stadium_id": None,
-                "attendence": 0,
+                "home_team_id": home_team_id,
+                "away_team_id": away_team_id,
+                "season_id": season_id,
+                "referee_id": referee_id,
+                "stadium_id": stadium_id,
+                "attendence": row["attendance"],
                 "home_team_goals": row["HomeGoalCount"],
                 "away_team_goals": row["AwayGoalCount"],
                 "home_team_goals_at_half_time": row["HomeGoalsHT"],
@@ -148,8 +254,8 @@ def load_matches(matches: pd.DataFrame) -> int:
                 "away_team_fouls": row["AwayFouls"],
                 "home_team_possession": row["HomePossession"],
                 "away_team_possession": row["AwayPossession"],
-                "home_team_xg": 0,
-                "away_team_xg": 0
+                "home_team_xg": row["team_a_xg"],
+                "away_team_xg": row["team_b_xg"]
             })
 
             inserted_rows += 1
