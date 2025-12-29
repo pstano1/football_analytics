@@ -53,7 +53,7 @@ def load_referees(referees: pd.DataFrame) -> int:
         )
         country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
         for _, row in referees.iterrows():
-            if row["Country"] not in country_to_association_map:
+            if row["Nationality"] not in country_to_association_map:
                 continue
 
             id = str(uuid.uuid4())

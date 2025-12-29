@@ -30,7 +30,7 @@ def extract_stadiums() -> pd.DataFrame:
 
 @op
 def transform_stadiums(stadiums: pd.DataFrame) -> pd.DataFrame:
-    stadiums.drop_duplicates()
+    stadiums = stadiums.drop_duplicates()
     stadiums = stadiums.drop(columns=[
         "VenueSK", 
         "Location",
@@ -55,13 +55,13 @@ def load_stadiums(stadiums: pd.DataFrame) -> int:
             id = str(uuid.uuid4())
             connection.execute(text('''INSERT INTO core.stadiums(
                 stadium_id,
-                name,
+                name
             ) VALUES (
                 :id,
-                :full_name,
-            )'''), {
+                :full_name
+            ) ON CONFLICT (name) DO NOTHING'''), {
                 "id": id,
-                "full_name": row["VenueName"],
+                "full_name": row["VenueName"]
             })
 
             inserted_rows += 1

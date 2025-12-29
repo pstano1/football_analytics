@@ -61,7 +61,7 @@ def extract_players_teams() -> pd.DataFrame:
         SELECT
             pls.PlayerSK,
             pls.TeamSK,
-            pls.SeasonSK,
+            s.SeasonSK,
             p.PlayerName,
             t.TeamName,
             t.CommonName,
@@ -74,7 +74,7 @@ def extract_players_teams() -> pd.DataFrame:
         JOIN
             dbo.T_DIM_Team t ON t.TeamSK = pls.TeamSK
         JOIN
-            dbo.T_DIM_Season s ON s.SeasonSK = pls.SeasonSK;
+            dbo.T_DIM_Season s ON s.SeasonSK = t.SeasonSK;
     """
 
     return pd.read_sql(query, engine)
@@ -105,7 +105,9 @@ def extract_player_statistics() -> pd.DataFrame:
         JOIN 
             dbo.T_DIM_Player p ON p.PlayerSK = pls.PlayerSK
         JOIN
-            dbo.T_DIM_Season s ON s.SeasonSK = pls.SeasonSK;
+            dbo.T_F_LeagueSeason_Stats ls ON ls.League_id = pls.League_id
+        JOIN
+            dbo.T_DIM_Season s ON s.SeasonSK = ls.SeasonSK;
     """
 
     return pd.read_sql(query, engine)
@@ -120,6 +122,9 @@ def normalize_name(name: str) -> str:
 
 
 def normalize_season_name(start, end) -> str:
+    if pd.isna(start) or pd.isna(end):
+        return None
+        
     ending = int(end)
     starting = int(start)
     if starting == ending:
@@ -197,7 +202,7 @@ def load_players(players: pd.DataFrame) -> int:
                 "full_name": row["PlayerName"],
                 "birthday": row["DateOfBirth"],
                 "primary_position": row["Position"],
-                "nationality": row["Nationality"]
+                "nationality": row["Nationality"] if pd.notna(row["Nationality"]) else None
             })
 
             inserted_rows += 1
@@ -206,7 +211,7 @@ def load_players(players: pd.DataFrame) -> int:
 
 
 @op
-def load_players_teams(data: pd.DataFrame) -> int:
+def load_players_teams(data: pd.DataFrame, _upstream: int) -> int:
     inserted_rows = 0
     engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
         f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
@@ -250,7 +255,7 @@ def load_players_teams(data: pd.DataFrame) -> int:
 
 
 @op
-def load_player_statistics(data: pd.DataFrame) -> int:
+def load_player_statistics(data: pd.DataFrame, _upstream: int) -> int:
     inserted_rows = 0
     engine = create_engine(f"postgresql+psycopg2://{os.environ['POSTGRES_USER']}:" \
         f"{os.environ['POSTGRES_PASSWORD']}@minerva_postgres:{os.environ['POSTGRES_PORT']}" \
@@ -328,6 +333,6 @@ def players_etl():
     players_teams_df = extract_players_teams()
     player_stats_df = extract_player_statistics()
 
-    load_players(players_df)
-    load_players_teams(players_teams_df)
-    load_player_statistics(player_stats_df)
+    loaded_players = load_players(players_df)
+    _loaded_players_teams = load_players_teams(players_teams_df, loaded_players) 
+    _loaded_player_stats = load_player_statistics(player_stats_df, loaded_players)

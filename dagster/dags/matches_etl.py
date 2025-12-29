@@ -26,7 +26,7 @@ def extract_matches() -> pd.DataFrame:
             m.*,
             r.FirstName AS ref_name,
             r.LastName AS ref_surname,
-            v.VenueName AS stadium_name
+            v.VenueName AS stadium_name,
             s.StartingYear AS season_starting_year,
             s.EndingYear AS season_ending_year
         FROM 
@@ -44,25 +44,30 @@ def extract_matches() -> pd.DataFrame:
 
 @op
 def transform_matches(matches: pd.DataFrame) -> pd.DataFrame:
-    matches.drop_duplicates()
+    matches = matches.drop_duplicates()
+    
     required_columns = [
-        'MatchSK', 'DateSK', 'SeasonSK', 'HomeTeamSK', 'AwayTeamSK', 'VenueSK',
-        'HomeGoalCount', 'AwayGoalCount', 'HomeGoalsHT', 'AwayGoalsHT',
-        'HomeCorners', 'AwayCorners',
-        'HomeYellowCards', 'AwayYellowCards',
-        'HomeRedCards', 'AwayRedCards',
-        'HomeShotsOnTarget', 'AwayShotsOnTarget',
-        'HomeShotsOffTarget', 'AwayShotsOffTarget',
-        'HomeFouls', 'AwayFouls',
-        'HomePossession', 'AwayPossession',
-        'HomeXG', 'AwayXG', 
-        'HomeTeamName', 'AwayTeamName'
+        'MatchSK', 'DateSK', 'SeasonSK', 'HomeTeam_id', 'AwayTeam_id', 'VenueSK',
+        'homeGoalCount', 'awayGoalCount', 'ht_goals_team_a', 'ht_goals_team_b',
+        'team_a_corners', 'team_b_corners',
+        'team_a_yellow_cards', 'team_b_yellow_cards',
+        'team_a_red_cards', 'team_b_red_cards',
+        'team_a_shotsOnTarget', 'team_b_shotsOnTarget',
+        'team_a_shotsOffTarget', 'team_b_shotsOffTarget',
+        'team_a_fouls', 'team_b_fouls',
+        'team_a_possession', 'team_b_possession',
+        'team_a_xg', 'team_b_xg', 
+        'ref_name', 'ref_surname', 'stadium_name',
+        'season_starting_year', 'season_ending_year',
+        'home_team_name', 'away_team_name', 'attendance'
     ]
+    
     keep_cols = [col for col in required_columns if col in matches.columns]
-    if 'DateSK' in keep_cols.columns:
-        keep_cols['date'] = pd.to_datetime(matches['DateSK'], format='%Y%m%d').dt.date
-        keep_cols = keep_cols.drop(columns=['DateSK'])
-    matches_cleaned = matches.drop_duplicates().loc[:, keep_cols]
+    matches_cleaned = matches[keep_cols].copy()
+    
+    if 'DateSK' in matches_cleaned.columns:
+        matches_cleaned['date'] = pd.to_datetime(matches_cleaned['DateSK'], format='%Y%m%d').dt.date
+        matches_cleaned = matches_cleaned.drop(columns=['DateSK'])
 
     return matches_cleaned
 
@@ -131,7 +136,7 @@ def load_season_lookup(engine) -> dict:
 
     lookup = {}
     for row in result:
-        if row.season_name:
+        if row.name:
             lookup[row.name] = row.season_id
 
     return lookup
@@ -160,13 +165,13 @@ def load_matches(matches: pd.DataFrame) -> int:
             stadium_id = stadium_lookup.get(
                 normalize_name(row["stadium_name"])
             )
-            home_team_id = team_lookup(
+            home_team_id = team_lookup.get(
                 normalize_name(row["home_team_name"])
             )
-            away_team_id = team_lookup(
+            away_team_id = team_lookup.get(
                 normalize_name(row["away_team_name"])
             )
-            season_id = season_lookup(
+            season_id = season_lookup.get(
                 normalize_season_name(row["season_starting_year"], row["season_ending_year"])
             )
 
@@ -178,7 +183,7 @@ def load_matches(matches: pd.DataFrame) -> int:
                 season_id,
                 referee_id,
                 stadium_id,
-                attendence,
+                attendance,
                 home_team_goals,
                 away_team_goals,
                 home_team_goals_at_half_time,
@@ -203,10 +208,11 @@ def load_matches(matches: pd.DataFrame) -> int:
                 :id,
                 :date,
                 :home_team_id,
-                :away_team_id
+                :away_team_id,
+                :season_id,
                 :referee_id,
                 :stadium_id,
-                :attendence,
+                :attendance,
                 :home_team_goals,
                 :away_team_goals,
                 :home_team_goals_at_half_time,
@@ -235,25 +241,25 @@ def load_matches(matches: pd.DataFrame) -> int:
                 "season_id": season_id,
                 "referee_id": referee_id,
                 "stadium_id": stadium_id,
-                "attendence": row["attendance"],
-                "home_team_goals": row["HomeGoalCount"],
-                "away_team_goals": row["AwayGoalCount"],
-                "home_team_goals_at_half_time": row["HomeGoalsHT"],
-                "away_team_goals_at_half_time": row["AwayGoalsHT"],
-                "home_team_corners": row["HomeCorners"],
-                "away_team_corners": row["AwayCorners"],
-                "home_team_yellow_cards": row["HomeYellowCards"],
-                "away_team_yellow_cards": row["AwayYellowCards"],
-                "home_team_red_cards": row["HomeRedCards"],
-                "away_team_red_cards": row["AwayRedCards"],
-                "home_team_shots_on_target": row["HomeShotsOnTarget"],
-                "away_team_shots_on_target": row["AwayShotsOnTarget"],
-                "home_team_shots_off_target": row["HomeShotsOffTarget"],
-                "away_team_shots_off_target": row["AwayShotsOffTarget"],
-                "home_team_fouls": row["HomeFouls"],
-                "away_team_fouls": row["AwayFouls"],
-                "home_team_possession": row["HomePossession"],
-                "away_team_possession": row["AwayPossession"],
+                "attendance": row.get("attendance"),
+                "home_team_goals": row["homeGoalCount"],
+                "away_team_goals": row["awayGoalCount"],
+                "home_team_goals_at_half_time": row["ht_goals_team_a"],
+                "away_team_goals_at_half_time": row["ht_goals_team_b"],
+                "home_team_corners": row["team_a_corners"],
+                "away_team_corners": row["team_b_corners"],
+                "home_team_yellow_cards": row["team_a_yellow_cards"],
+                "away_team_yellow_cards": row["team_b_yellow_cards"],
+                "home_team_red_cards": row["team_a_red_cards"],
+                "away_team_red_cards": row["team_b_red_cards"],
+                "home_team_shots_on_target": row["team_a_shotsOnTarget"],
+                "away_team_shots_on_target": row["team_b_shotsOnTarget"],
+                "home_team_shots_off_target": row["team_a_shotsOffTarget"],
+                "away_team_shots_off_target": row["team_b_shotsOffTarget"],
+                "home_team_fouls": row["team_a_fouls"],
+                "away_team_fouls": row["team_b_fouls"],
+                "home_team_possession": row["team_a_possession"],
+                "away_team_possession": row["team_b_possession"],
                 "home_team_xg": row["team_a_xg"],
                 "away_team_xg": row["team_b_xg"]
             })

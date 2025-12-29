@@ -73,23 +73,22 @@ CREATE TABLE core.players(
     primary_position VARCHAR(64),
     nationality      VARCHAR(128),
 
-    CONSTRAINT player_position_fk FOREIGN KEY (primary_position) REFERENCES core.positions(position),
-    CONSTRAINT player_country_fk FOREIGN KEY (nationality) REFERENCES core.countries(name)
+    CONSTRAINT player_position_fk FOREIGN KEY (primary_position) REFERENCES core.positions(position)
 );
 
 CREATE TABLE core.player_statistics(
     player_id      UUID,
     season_id      UUID,
-    appearances    SMALLINT,
-    minutes_played SMALLINT,
-    goals          SMALLINT,
-    assists        SMALLINT,
-    penalty_goals  SMALLINT,
-    penalty_misses SMALLINT,
-    clean_sheets   SMALLINT,
-    conceded_goals SMALLINT,
-    yellow_cards   SMALLINT,
-    red_cards      SMALLINT,
+    appearances    INTEGER,
+    minutes_played INTEGER,
+    goals          INTEGER,
+    assists        INTEGER,
+    penalty_goals  INTEGER,
+    penalty_misses INTEGER,
+    clean_sheets   INTEGER,
+    conceded_goals INTEGER,
+    yellow_cards   INTEGER,
+    red_cards      INTEGER,
 
     PRIMARY KEY (player_id, season_id)
 );
@@ -98,10 +97,8 @@ CREATE TABLE core.teams(
     team_id UUID PRIMARY KEY,
     team_name VARCHAR(256) NOT NULL,
     common_name VARCHAR(256),
-    association_id UUID,
     home_stadium UUID,
 
-    CONSTRAINT team_association_fk FOREIGN KEY (association_id) REFERENCES core.associations(association_id),
     CONSTRAINT team_stadium_fk FOREIGN KEY (home_stadium) REFERENCES core.stadiums(stadium_id)
 );
 
@@ -121,7 +118,7 @@ CREATE TABLE core.matches(
     season_id                    UUID,
     referee_id                   UUID,
     stadium_id                   UUID,
-    attendence                   SMALLINT,
+    attendance                   INTEGER,
     home_team_goals              SMALLINT,
     away_team_goals              SMALLINT,
     home_team_goals_at_half_time SMALLINT,

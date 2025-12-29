@@ -22,7 +22,7 @@ def extract_positions() -> pd.DataFrame:
     )
     query = """
         SELECT 
-            Position
+            DISTINCT Position
         FROM 
             dbo.T_DIM_Player;
     """

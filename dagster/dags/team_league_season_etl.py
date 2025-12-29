@@ -22,9 +22,9 @@ def extract_teams_leagues_seasons() -> pd.DataFrame:
     )
     query = """
         SELECT
-            fls.LeagueSK,
-            fls.TeamSK,
+            fls.League_id,
             fls.SeasonSK,
+            t.TeamSK,
             t.TeamName,
             t.CommonName,
             l.LeagueName,
@@ -32,12 +32,12 @@ def extract_teams_leagues_seasons() -> pd.DataFrame:
             s.EndingYear
         FROM 
             dbo.T_F_LeagueSeason_Stats fls
+        JOIN
+            dbo.T_DIM_League l ON l.League_id = fls.League_id
+        JOIN
+            dbo.T_DIM_Season s ON s.SeasonSK = fls.SeasonSK
         JOIN 
-            dbo.T_DIM_Team t ON t.TeamSK = fls.TeamSK
-        JOIN
-            dbo.T_DIM_League l ON l.LeagueSK = fls.LeagueSK
-        JOIN
-            dbo.T_DIM_Season s ON s.SeasonSK = fls.SeasonSK;
+            dbo.T_DIM_Team t ON t.SeasonSK = s.SeasonSK;
     """
 
     return pd.read_sql(query, engine)
@@ -141,7 +141,7 @@ def load_teams_leagues_seasons(data: pd.DataFrame) -> int:
                 :team_id,
                 :league_id,
                 :season_id
-            ) ON CONFLICT (team_id, league_id, season_id) DO NOTHING'''), {
+            ) ON CONFLICT (team_id, season_id) DO NOTHING'''), {
                 "team_id": team_id,
                 "league_id": league_id,
                 "season_id": season_id

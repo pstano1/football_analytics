@@ -3,9 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="43"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="40"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="46,33" last-zoom="0.95" scene-rect="-128,-1,2730.56,1429.32"
+	 last-position="0,28" last-zoom="0.95" scene-rect="0,0,3400.86,1392.72"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -62,10 +62,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="teams" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
+<table name="teams" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="460" y="60"/>
+	<position x="360" y="60"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -75,13 +75,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="common_name">
 		<type name="varchar" length="256"/>
 	</column>
-	<column name="association_id">
-		<type name="uuid" length="0"/>
-	</column>
 	<column name="home_stadium">
 		<type name="uuid" length="0"/>
 	</column>
-	<constraint name="team_pk" type="pk-constr" table="core.teams">
+	<constraint name="teams_pk" type="pk-constr" table="core.teams">
 		<columns names="team_id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -89,7 +86,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="countries" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="860" y="60"/>
+	<position x="680" y="60"/>
 	<column name="name" not-null="true">
 		<type name="varchar" length="128"/>
 	</column>
@@ -107,7 +104,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="associations" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1280" y="60"/>
+	<position x="1000" y="60"/>
 	<column name="association_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -128,7 +125,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="seasons" layers="0" collapse-mode="1" max-obj-count="2" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="700" y="260"/>
+	<position x="1320" y="60"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -143,7 +140,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="leagues" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="80" y="400"/>
+	<position x="60" y="240"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -164,7 +161,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="leagues_seasons" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="340" y="200"/>
+	<position x="360" y="240"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -179,7 +176,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="matches" layers="0" collapse-mode="1" max-obj-count="33" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1240" y="420"/>
+	<position x="600" y="240"/>
 	<column name="match_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -201,8 +198,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="stadium_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="attendence">
-		<type name="smallint" length="0"/>
+	<column name="attendance">
+		<type name="integer" length="0"/>
 	</column>
 	<column name="home_team_goals">
 		<type name="smallint" length="0"/>
@@ -272,7 +269,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="referees" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1000" y="240"/>
+	<position x="940" y="240"/>
 	<column name="referee_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -290,7 +287,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="stadiums" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1300" y="240"/>
+	<position x="1240" y="240"/>
 	<column name="stadium_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -319,34 +316,34 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="appearances">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="minutes_played">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="goals">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="assists">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="penalty_goals">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="penalty_misses">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="clean_sheets">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="conceded_goals">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="yellow_cards">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<column name="red_cards">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 	</column>
 	<constraint name="player_season_pk" type="pk-constr" table="core.player_statistics">
 		<columns names="player_id,season_id" ref-type="src-columns"/>
@@ -356,7 +353,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="associations_self_relations" layers="0" collapse-mode="1" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="340" y="800"/>
+	<position x="320" y="760"/>
 	<column name="parent_association" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -371,7 +368,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="etl_logs" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
 	<schema name="metadata"/>
 	<role name="postgres"/>
-	<position x="1580" y="60"/>
+	<position x="1600" y="60"/>
 	<column name="log_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -419,7 +416,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="players_teams" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="1040" y="760"/>
+	<position x="880" y="760"/>
 	<column name="player_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -437,7 +434,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fact_match_performance" layers="0" collapse-mode="2" max-obj-count="18" z-value="0">
 	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1960" y="320"/>
+	<position x="1920" y="60"/>
 	<column name="match_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -491,7 +488,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_team" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1580" y="340"/>
+	<position x="2280" y="60"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -506,7 +503,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_match" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2360" y="320"/>
+	<position x="2580" y="60"/>
 	<column name="match_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -527,7 +524,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2360" y="680"/>
+	<position x="2860" y="60"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -542,7 +539,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_league" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="match_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1580" y="680"/>
+	<position x="3160" y="60"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -557,7 +554,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fact_player_performance" layers="0" collapse-mode="2" max-obj-count="16" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="1580" y="820"/>
+	<position x="60" y="1060"/>
 	<column name="player_id">
 		<type name="uuid" length="0"/>
 	</column>
@@ -605,7 +602,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_player" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2060" y="820"/>
+	<position x="460" y="1060"/>
 	<column name="player_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -629,7 +626,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2080" y="980"/>
+	<position x="760" y="1060"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -644,7 +641,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_league" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2080" y="1100"/>
+	<position x="1060" y="1060"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -662,7 +659,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_team" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="player_performance_mart"/>
 	<role name="postgres"/>
-	<position x="2080" y="1220"/>
+	<position x="1340" y="1060"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -680,7 +677,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fact_team_standings" layers="0" collapse-mode="2" max-obj-count="12" z-value="0">
 	<schema name="team_standings_mart"/>
 	<role name="postgres"/>
-	<position x="60" y="1060"/>
+	<position x="1640" y="1060"/>
 	<column name="team_id">
 		<type name="uuid" length="0"/>
 	</column>
@@ -716,7 +713,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_team" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="team_standings_mart"/>
 	<role name="postgres"/>
-	<position x="560" y="1040"/>
+	<position x="1980" y="1060"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -734,7 +731,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_season" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
 	<schema name="team_standings_mart"/>
 	<role name="postgres"/>
-	<position x="560" y="1180"/>
+	<position x="2300" y="1060"/>
 	<column name="season_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -749,7 +746,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="dim_league" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="team_standings_mart"/>
 	<role name="postgres"/>
-	<position x="560" y="1300"/>
+	<position x="2580" y="1060"/>
 	<column name="league_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -767,7 +764,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="teams_leagues_seasons" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
-	<position x="400" y="420"/>
+	<position x="1120" y="760"/>
 	<column name="team_id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -779,22 +776,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 </table>
 
-<constraint name="players_country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.countries" table="core.players">
-	<columns names="nationality" ref-type="src-columns"/>
-	<columns names="name" ref-type="dst-columns"/>
-</constraint>
-
 <constraint name="primary_position_positions_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="CASCADE" del-action="SET NULL" ref-table="core.positions" table="core.players">
 	<columns names="primary_position" ref-type="src-columns"/>
 	<columns names="position" ref-type="dst-columns"/>
-</constraint>
-
-<constraint name="association_associations_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="NO ACTION" del-action="SET NULL" ref-table="core.associations" table="core.teams">
-	<columns names="team_id" ref-type="src-columns"/>
-	<columns names="association_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="home_stadium_stadiums_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
@@ -1000,11 +985,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="core.countries" reference-fk="association_country_fk"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_players_country" type="relfk" layers="0"
-	 src-table="core.players"
-	 dst-table="core.countries" reference-fk="players_country_fk"
-	 src-required="false" dst-required="false"/>
-
 <relationship name="rel_league_associations" type="relfk" layers="0"
 	 src-table="core.leagues"
 	 dst-table="core.associations" reference-fk="league_association_fk"
@@ -1049,15 +1029,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="core.matches"
 	 dst-table="core.seasons" reference-fk="season_seasons_fk"
 	 src-required="false" dst-required="false"/>
-
-<relationship name="rel_teams_associations" type="relfk" layers="0"
-	 src-table="core.teams"
-	 dst-table="core.associations" reference-fk="association_associations_fk"
-	 src-required="false" dst-required="true">
-	<label ref-type="name-label">
-		<position x="6.78402" y="-2.65299"/>
-	</label>
-</relationship>
 
 <relationship name="rel_associations_self_relations_associations" type="relfk" layers="0"
 	 src-table="core.associations_self_relations"

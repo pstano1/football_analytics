@@ -51,31 +51,20 @@ def load_teams(teams: pd.DataFrame) -> int:
         f"/{os.environ['POSTGRES_DB']}"
     )
     with engine.begin() as connection:
-        federations = pd.read_sql(
-          "SELECT association_id, country FROM core.associations", 
-          connection
-        )
-        country_to_association_map = dict(zip(federations["country"], federations["association_id"]))
         for _, row in teams.iterrows():
-            if row["Country"] not in country_to_association_map:
-                continue
-
             id = str(uuid.uuid4())
             connection.execute(text('''INSERT INTO core.teams(
                 team_id,
                 team_name,
-                common_name,
-                association_id
+                common_name
             ) VALUES (
                 :id,
                 :full_name,
-                :short_name,
-                :association_id
+                :short_name
             )'''), {
                 "id": id,
                 "full_name": row["TeamName"],
                 "short_name": row["CommonName"],
-                "association_id": country_to_association_map[row["Country"]]
             })
 
             inserted_rows += 1
