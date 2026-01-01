@@ -7,7 +7,8 @@ SELECT
     m.match_id,
     m.attendance,
     s.name as stadium,
-    r.full_name as referee
+    r.full_name as referee,
+    m.date
 FROM 
     {{ source('core', 'matches') }} m
 LEFT JOIN {{ source('core', 'stadiums') }} s

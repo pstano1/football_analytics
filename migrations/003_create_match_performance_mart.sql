@@ -14,7 +14,8 @@ CREATE TABLE mart_match_performance.dim_match(
     match_id   UUID PRIMARY KEY,
     attendence SMALLINT,
     stadium    VARCHAR(256),
-    referee    VARCHAR(128)
+    referee    VARCHAR(128),
+    date       DATE NOT NULL
 );
 
 CREATE TABLE mart_match_performance.dim_season(
@@ -28,18 +29,31 @@ CREATE TABLE mart_match_performance.fact_match_performance(
     opponent_id        UUID,
     season_id          UUID,
     league_id          UUID,
-    goals              SMALLINT,
-    goals_at_half_time SMALLINT,
-    corners            SMALLINT,
-    yellow_cards       SMALLINT,
-    red_cards          SMALLINT,
-    shots_on_target    SMALLINT,
-    shots_off_target   SMALLINT,
-    fouls              SMALLINT,
-    possiession        SMALLINT,
-    xg                 SMALLINT,
 
-    PRIMARY KEY (match_id, team_id, opponent_id, season_id, league_id),
+    goals                       SMALLINT,
+    goals_at_half_time          SMALLINT,
+    corners                     SMALLINT,
+    yellow_cards                SMALLINT,
+    red_cards                   SMALLINT,
+    shots_on_target             SMALLINT,
+    shots_off_target            SMALLINT,
+    fouls                       SMALLINT,
+    possession                  SMALLINT,
+    xg                          DECIMAL(8,2),
+
+    goals_conceded              SMALLINT,
+    goals_conceded_at_half_time SMALLINT,
+    corners_against             SMALLINT,
+    xg_against                  DECIMAL(8,2),
+
+    goal_difference             SMALLINT,
+    result                      VARCHAR(1),
+    points                      SMALLINT,
+    clean_sheet                 SMALLINT,
+    failed_to_score             SMALLINT,
+    home_away                   VARCHAR(1),
+
+    PRIMARY KEY (match_id, team_id),
 
     CONSTRAINT dim_match_fk FOREIGN KEY (match_id) REFERENCES mart_match_performance.dim_match(match_id),
     CONSTRAINT dim_team_fk FOREIGN KEY (team_id) REFERENCES mart_match_performance.dim_team(team_id),
