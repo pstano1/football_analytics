@@ -46,4 +46,6 @@ LEFT JOIN {{ source('core', 'matches') }} m
     ON t.team_id = m.home_team_id OR t.team_id = m.away_team_id
 LEFT JOIN {{ source('core', 'teams_leagues_seasons') }} tls
     ON tls.team_id = t.team_id AND tls.season_id = m.season_id
+GROUP BY 
+    t.team_id, m.season_id, tls.league_id
 

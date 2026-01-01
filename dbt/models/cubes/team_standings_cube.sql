@@ -6,7 +6,7 @@ SELECT
     t.team_id,
     tls.season_id,
     tls.league_id,
-    m.match_date,
+    m.date,
     COUNT(*) AS matches_played,
     SUM(
         CASE
@@ -55,10 +55,10 @@ GROUP BY
     t.team_id,
     tls.season_id,
     tls.league_id,
-    m.match_date
+    m.date
 ORDER BY
-    season_id,
-    league_id,
-    points DESC,
-    goals - goals_conceded DESC
+    2,  -- season_id
+    3,  -- league_id
+    8 DESC,  -- points
+    (9 - 10) DESC  -- goals - goals_conceded
 

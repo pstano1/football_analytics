@@ -5,7 +5,7 @@
 
 SELECT
     m.match_id,
-    m.attendence,
+    m.attendance,
     s.name as stadium,
     r.full_name as referee
 FROM 

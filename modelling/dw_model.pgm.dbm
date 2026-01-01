@@ -137,7 +137,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="leagues" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+<table name="leagues" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
 	<schema name="core"/>
 	<role name="postgres"/>
 	<position x="60" y="240"/>
@@ -145,6 +145,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="name" not-null="true">
+		<type name="varchar" length="256"/>
+	</column>
+	<column name="key_name" not-null="true">
 		<type name="varchar" length="256"/>
 	</column>
 	<column name="association_id" not-null="true">

@@ -2,7 +2,6 @@ SELECT
     p.player_id,
     p.season_id,
     pt.team_id,
-    tls.season_id,
     p.minutes_played,
     p.appearances,
     p.goals,

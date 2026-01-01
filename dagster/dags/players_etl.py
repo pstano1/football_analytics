@@ -105,7 +105,7 @@ def extract_player_statistics() -> pd.DataFrame:
         JOIN 
             dbo.T_DIM_Player p ON p.PlayerSK = pls.PlayerSK
         JOIN
-            dbo.T_F_LeagueSeason_Stats ls ON ls.League_id = pls.League_id
+            dbo.T_F_LeagueSeason_Stats ls ON ls.competition_id = pls.competition_id
         JOIN
             dbo.T_DIM_Season s ON s.SeasonSK = ls.SeasonSK;
     """

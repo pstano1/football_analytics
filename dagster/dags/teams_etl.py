@@ -61,10 +61,10 @@ def load_teams(teams: pd.DataFrame) -> int:
                 :id,
                 :full_name,
                 :short_name
-            )'''), {
+            ) ON CONFLICT (team_name) DO NOTHING'''), {
                 "id": id,
                 "full_name": row["TeamName"],
-                "short_name": row["CommonName"],
+                "short_name": row["cleanName"],
             })
 
             inserted_rows += 1

@@ -46,10 +46,12 @@ CREATE TABLE core.associations_self_relations(
 CREATE TABLE core.leagues(
     league_id      UUID PRIMARY KEY,
     name           VARCHAR(256) NOT NULL,
+    key_name       VARCHAR(256) NOT NULL,
     association_id UUID,
     tier           SMALLINT,
 
-    CONSTRAINT league_association_fk FOREIGN KEY (association_id) REFERENCES core.associations(association_id)
+    CONSTRAINT league_association_fk FOREIGN KEY (association_id) REFERENCES core.associations(association_id),
+    CONSTRAINT league_association_unique UNIQUE (name, association_id)
 );
 
 CREATE TABLE core.leagues_seasons(
@@ -95,7 +97,7 @@ CREATE TABLE core.player_statistics(
 
 CREATE TABLE core.teams(
     team_id UUID PRIMARY KEY,
-    team_name VARCHAR(256) NOT NULL,
+    team_name VARCHAR(256) NOT NULL UNIQUE,
     common_name VARCHAR(256),
     home_stadium UUID,
 
@@ -156,5 +158,5 @@ CREATE TABLE core.teams_leagues_seasons (
     CONSTRAINT teams_leagues_seasons_league_fk FOREIGN KEY (league_id) REFERENCES core.leagues(league_id),
     CONSTRAINT teams_leagues_seasons_season_fk FOREIGN KEY (season_id) REFERENCES core.seasons(season_id),
     
-    PRIMARY KEY (team_id, season_id)
+    PRIMARY KEY (team_id, season_id, league_id)
 );

@@ -47,3 +47,15 @@ CREATE TABLE mart_match_performance.fact_match_performance(
     CONSTRAINT dim_season_fk FOREIGN KEY (season_id) REFERENCES mart_match_performance.dim_season(season_id),
     CONSTRAINT dim_league_fk FOREIGN KEY (league_id) REFERENCES mart_match_performance.dim_league(league_id)
 );
+
+CREATE TABLE mart_match_performance.bridge_team_league_season (
+    team_id   UUID NOT NULL,
+    league_id UUID NOT NULL,
+    season_id UUID NOT NULL,
+
+    CONSTRAINT team_league_season_team_fk FOREIGN KEY (team_id) REFERENCES mart_match_performance.dim_team(team_id),
+    CONSTRAINT team_league_season_league_fk FOREIGN KEY (league_id) REFERENCES mart_match_performance.dim_league(league_id),
+    CONSTRAINT team_league_season_season_fk FOREIGN KEY (season_id) REFERENCES mart_match_performance.dim_season(season_id),
+    
+    PRIMARY KEY (team_id, season_id, league_id)
+);
