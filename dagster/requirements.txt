@@ -6,6 +6,7 @@ dagster-webserver
 dagster-dbt
 dbt-core
 dbt-postgres
+dbt-clickhouse
 dagit
 pandas
 sqlalchemy

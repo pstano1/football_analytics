@@ -1,5 +1,8 @@
 {{ config(
-    materialized='table'
+    materialized='table',
+    engine='MergeTree()',
+    order_by='(season_id, league_id, team_id, date)',
+    database=env_var('CLICKHOUSE_DB')
 ) }}
 
 SELECT

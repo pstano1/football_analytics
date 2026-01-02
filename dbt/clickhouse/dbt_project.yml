@@ -1,0 +1,11 @@
+name: minerva_clickhouse_dbt
+version: '1.0'
+config-version: 2
+profile: clickhouse
+
+model-paths: ["models"]
+
+models:
+  minerva_clickhouse_dbt:
+    team_standings_cube:
+      +schema: team_standings_cube

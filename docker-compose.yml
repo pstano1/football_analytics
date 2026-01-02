@@ -113,6 +113,11 @@ services:
       SOURCE_MSSQL_DB: ${SOURCE_MSSQL_DB}
       SOURCE_MSSQL_PORT: ${SOURCE_MSSQL_PORT}
       SOURCE_MSSQL_HOST: mssql_db
+      CLICKHOUSE_HOST: ${PROJECT_NAME}-clickhouse
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-default}
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse123}
+      CLICKHOUSE_PORT: ${CLICKHOUSE_PORT:-8123}
     volumes:
       - ./dbt:/dbt
     networks:
@@ -141,6 +146,11 @@ services:
       SOURCE_MSSQL_DB: ${SOURCE_MSSQL_DB}
       SOURCE_MSSQL_PORT: ${SOURCE_MSSQL_PORT}
       SOURCE_MSSQL_HOST: mssql_db
+      CLICKHOUSE_HOST: ${PROJECT_NAME}-clickhouse
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB:-default}
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse123}
+      CLICKHOUSE_PORT: ${CLICKHOUSE_PORT:-8123}
     volumes: 
       - minerva_postgres_data:/var/lib/postgresql/data
       - ./dagster/jobs:/jobs

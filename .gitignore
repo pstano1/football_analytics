@@ -1,3 +1,5 @@
+.idea/
+
 .env
 .DS_Store
 **/__pycache__
@@ -12,8 +14,8 @@ nodes/
 node.lock
 
 **/.user.yml
-dbt/logs/
-dbt/target/
+dbt/**/logs/
+dbt/**/target/
 
 mkdocs.build.yml
 site/
