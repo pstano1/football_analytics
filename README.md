@@ -6,6 +6,10 @@
 
 A comprehensive football analytics data platform combining modern data engineering tools to provide insights into match performance, player statistics, and team standings across 50+ leagues.
 
+## Demo Video
+
+You can watch the video [here](https://www.youtube.com/watch?v=tPr1r_MtDuk).
+
 ## Project Overview
 
 This platform:

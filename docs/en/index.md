@@ -32,7 +32,8 @@ project/
 │   ├── dags/            # Pipeline definitions
 │   └── jobs/            # ETL jobs
 ├── dbt/                 # Transformation models
-│   └── models/          # dbt models
+|   |__ clickhouse/      # dbt clickhouse models
+│   └── postgres/        # dbt postgres models
 ├── migrations/          # Database schemas
 ├── docker-compose.yml   # Service definitions
 └── .env.example         # Configuration template

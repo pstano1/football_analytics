@@ -64,9 +64,17 @@ All job definitions are in the `dags` package.
 **Asset Structure**:
 
 ```python
-@dbt_assets(manifest=manifest_path)
-def my_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource):
-    yield from dbt.cli(["build"], context=context).stream()
+def make_dbt_assets(name: str, manifest_path: str, dbt_resource_key: str):
+    @dbt_assets(
+        manifest=manifest_path,
+        name=f"{name}_assets",
+        required_resource_keys={dbt_resource_key},
+    )
+    def _assets(context: AssetExecutionContext):
+        dbt = getattr(context.resources, dbt_resource_key)
+        yield from dbt.cli(["build"], context=context).stream()
+
+    return _assets
 ```
 
 ## Standalone Jobs

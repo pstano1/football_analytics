@@ -52,6 +52,20 @@ POSTGRES_PASSWORD=your_secure_password
 # Neo4j Configuration
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=test
+
+# Clickhouse Configuration
+CLICKHOUSE_HTTP_PORT=8123
+CLICKHOUSE_NATIVE_PORT=9000
+CLICKHOUSE_DB=default
+CLICKHOUSE_USER=
+CLICKHOUSE_PASSWORD=
+
+# Source MSSQL system (in this case based on fellow student's work)
+SOURCE_MSSQL_HOST=localhost
+SOURCE_MSSQL_PORT=1433
+SOURCE_MSSQL_DB=LEAGUE_DB
+SOURCE_MSSQL_USER=
+SOURCE_MSSQL_PASSWORD=
 ```
 
 ### 3. Start Services
