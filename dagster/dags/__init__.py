@@ -13,11 +13,23 @@ from .stadiums_etl import stadiums_etl
 from .team_league_season_etl import teams_leagues_seasons_etl
 from .teams_etl import teams_etl
 
+def make_dbt_assets(name: str, manifest_path: str, dbt_resource_key: str):
+    @dbt_assets(
+        manifest=manifest_path,
+        name=f"{name}_assets",
+        required_resource_keys={dbt_resource_key},
+    )
+    def _assets(context: AssetExecutionContext):
+        dbt = getattr(context.resources, dbt_resource_key)
+        yield from dbt.cli(["build"], context=context).stream()
+
+    return _assets
+
 def make_defs():
     print("=" * 50)
     print("STARTING make_defs()")
     print("=" * 50)
-    
+
     all_jobs = [
         associations_etl,
         leagues_etl,
@@ -27,21 +39,20 @@ def make_defs():
         referees_etl,
         stadiums_etl,
         teams_leagues_seasons_etl,
-        teams_etl
+        teams_etl,
     ]
 
     projects = {
         "postgres": "/dbt/postgres",
-        "clickhouse": "/dbt/clickhouse"
+        "clickhouse": "/dbt/clickhouse",
     }
 
     assets_list = []
     resources_dict = {}
 
     for name, project_dir in projects.items():
-        profiles_dir = project_dir 
         print(f"\n--- Setting up dbt project: {name} at {project_dir} ---")
-        
+
         if not os.path.exists(project_dir):
             print(f"Project dir {project_dir} not found. Skipping...")
             continue
@@ -52,11 +63,11 @@ def make_defs():
             print(f"Manifest not found for {name}. Running dbt parse...")
             try:
                 subprocess.run(
-                    ["dbt", "parse", "--profiles-dir", profiles_dir],
+                    ["dbt", "parse", "--profiles-dir", project_dir],
                     cwd=project_dir,
                     check=True,
                     capture_output=True,
-                    text=True
+                    text=True,
                 )
                 print(f"dbt parse for {name} completed successfully")
             except subprocess.CalledProcessError as e:
@@ -64,31 +75,32 @@ def make_defs():
                 print("stdout:", e.stdout)
                 print("stderr:", e.stderr)
                 continue
-            except FileNotFoundError:
-                print("dbt command not found. Is dbt-core installed?")
-                continue
+
+        dbt_resource_key = f"{name}_dbt"
 
         dbt_resource = DbtCliResource(
             project_dir=project_dir,
-            profiles_dir=profiles_dir,
+            profiles_dir=project_dir,
         )
 
         dbt_project = DbtProject(project_dir=project_dir)
         dbt_project.prepare_if_dev()
 
-        @dbt_assets(manifest=manifest_path, name=f"{name}_assets")
-        def project_assets(context: AssetExecutionContext, **kwargs):
-            dbt = kwargs[f"{name}_dbt"]
-            yield from dbt.cli(["build"], context=context).stream()
+        assets = make_dbt_assets(
+            name=name,
+            manifest_path=manifest_path,
+            dbt_resource_key=dbt_resource_key,
+        )
 
-        assets_list.append(project_assets)
-        resources_dict[f"{name}_dbt"] = dbt_resource
+        assets_list.append(assets)
+        resources_dict[dbt_resource_key] = dbt_resource
+
         print(f"✓ Created dbt assets for project {name}")
 
     defs_obj = Definitions(
         assets=assets_list,
         jobs=all_jobs,
-        resources=resources_dict
+        resources=resources_dict,
     )
 
     print(f"✓ Definitions created with {len(assets_list)} dbt asset sets")
