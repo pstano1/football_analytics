@@ -26,10 +26,6 @@ This platform:
 - **Data Discovery**: Amundsen integration for metadata management
 - **Interactive Analytics**: Power BI dashboards with real-time insights
 
-### Architecture
-
-![System architecture](https://raw.githubusercontent.com/pstano1/bachelors_thesis/c174a67c57ba60b26be984b1047d2f8012b7a1fa/figures/sys_architecture.png)
-
 ### Technology Stack
 
 | Component | Technology | Purpose |
@@ -117,5 +113,3 @@ Project is licensed under MIT License.
 ---
 
 > **Note** This is a thesis project and is not actively maintained.
-
-
