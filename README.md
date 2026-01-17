@@ -1,6 +1,6 @@
 # Football Analytics Data Platform
 
-> **Note**: This project was developed as part of a bachelor's thesis on modern data warehouse architectures. Full thesis available [here](#) (link to be added).
+> **Note**: This project was developed as part of a bachelor's thesis on modern data warehouse architectures. Full thesis available [here](https://github.com/pstano1/bachelors_thesis).
 
 > **Note**: The predefined ETL pipelines use preprocessed data (from a project implemented by a fellow student) rather than retrieving it directly from [https://footystats.org/api/](https://footystats.org/api/).
 
@@ -27,6 +27,8 @@ This platform:
 - **Interactive Analytics**: Power BI dashboards with real-time insights
 
 ### Architecture
+
+![System architecture](https://raw.githubusercontent.com/pstano1/bachelors_thesis/c174a67c57ba60b26be984b1047d2f8012b7a1fa/figures/sys_architecture.png)
 
 ### Technology Stack
 
